@@ -2068,6 +2068,7 @@ input[type="color"] { opacity: 0; position: absolute; width: 0; height: 0; }
 .logros-step-name{font-size:11px;font-weight:600;color:var(--text-primary);}
 .logros-step-days{font-size:10px;color:var(--text-tertiary);margin-top:2px;}
 </style>
+<style>/* EDICIÓN PERSONAL */#btn-logout,#renew-box{display:none!important}</style>
 </head>
 <body>
 <canvas id="galaxy-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;display:none;"></canvas>
@@ -3630,7 +3631,7 @@ input[type="color"] { opacity: 0; position: absolute; width: 0; height: 0; }
     </div>
 
     <!-- Renovar código de acceso -->
-    <div style="margin-top:12px;padding:12px;background:var(--surface-2);border-radius:var(--radius-sm);border:0.5px solid var(--border-strong);">
+    <div id="renew-box" style="margin-top:12px;padding:12px;background:var(--surface-2);border-radius:var(--radius-sm);border:0.5px solid var(--border-strong);">
       <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:4px;">
         <i class="ti ti-key" style="color:var(--accent);"></i> <span data-i18n="cfg_renovar">Renovar código de acceso</span>
       </div>
@@ -4150,6 +4151,8 @@ input[type="color"] { opacity: 0; position: absolute; width: 0; height: 0; }
   function renderExpiryBanner() {
     const banner = document.getElementById('code-expiry-banner');
     if (!banner) return;
+    /* EDICIÓN PERSONAL: sin vencimientos ni avisos de renovación */
+    banner.style.display = 'none'; return;
     const exp = getCodeExpiresAt();
     if (!exp) { banner.style.display = 'none'; return; }
 
