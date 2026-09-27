@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="es-AR" data-style="pastel" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carta Astral · Deicy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Lora:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ===== Tema Lila (pastel) místico — fijo ===== */
+  :root{
+    --bg:#110F18;--surface-1:#1A1726;--surface-2:#222030;--surface-3:#2C293C;
+    --border:rgba(167,139,196,.12);--border-strong:rgba(167,139,196,.24);
+    --text-primary:#EDE8FA;--text-secondary:#A895C8;--text-tertiary:#6F6196;
+    --accent:#B79AD6;--accent-bg:rgba(167,139,196,.14);--accent-2:#8B7BB8;
+    --fuego:#E0996B;--tierra:#9DC9A8;--aire:#C9A8E6;--agua:#8FB8D8;
+    --card:var(--surface-1);--card2:var(--surface-2);--line:var(--border-strong);
+    --txt:var(--text-primary);--muted:var(--text-secondary);--r:14px;
+    --font-sans:'Nunito',system-ui,sans-serif;--font-display:'Lora',Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.5 var(--font-sans);
+    background-image:radial-gradient(1px 1px at 20% 30%,rgba(255,255,255,.25),transparent),radial-gradient(1px 1px at 70% 18%,rgba(255,255,255,.18),transparent),radial-gradient(1.4px 1.4px at 45% 60%,rgba(255,255,255,.16),transparent),radial-gradient(1px 1px at 85% 70%,rgba(255,255,255,.15),transparent),radial-gradient(1px 1px at 33% 85%,rgba(255,255,255,.13),transparent);
+    background-attachment:fixed}
+  h1,h2,h3{font-family:var(--font-display);font-weight:600}
+  .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:10px;padding:11px 14px;background:rgba(26,23,38,.86);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .tb-back{background:transparent;border:none;color:var(--txt);font-size:14.5px;cursor:pointer;padding:6px 10px;border-radius:9px;text-decoration:none;display:flex;align-items:center;gap:6px;font-weight:600}
+  .tb-back:hover{background:var(--card2)}
+  .tb-brand{display:flex;align-items:center;gap:9px}
+  .tb-mark{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:18px;background:var(--accent-bg);border:1.5px solid var(--accent);flex:0 0 auto}
+  .tb-name{font-size:17px;font-weight:700;line-height:1.05;font-family:var(--font-display)}
+  .tb-tag{font-size:9px;color:var(--text-tertiary);letter-spacing:.16em;text-transform:uppercase;margin-top:2px}
+  .tb-moon{margin-left:auto;font-size:19px;opacity:.9;filter:drop-shadow(0 0 6px var(--accent))}
+  .wrap{max-width:640px;margin:0 auto;padding:16px}
+  .hero{background:radial-gradient(120% 140% at 85% 0%,rgba(167,139,196,.28),var(--card2) 60%);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:14px;position:relative;overflow:hidden}
+  .hero h1{margin:0 0 6px;font-size:22px}
+  .hero p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.55}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 16px;margin-bottom:13px}
+  .card h3{margin:0 0 11px;font-size:16px}
+  label{display:block;font-size:12px;color:var(--muted);margin:9px 0 3px;font-weight:700}
+  input,select{width:100%;padding:10px 11px;background:var(--card2);border:1px solid var(--line);border-radius:10px;color:var(--txt);font-size:15px;font-family:inherit}
+  input:focus,select:focus{outline:none;border-color:var(--accent)}
+  option{background:var(--surface-2);color:var(--text-primary)}
+  .row3{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:9px}
+  .row-city{display:flex;gap:8px}.row-city input{flex:1}
+  .chk{display:flex;align-items:flex-end}
+  .chkl{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);margin:0;cursor:pointer;font-weight:600;padding-bottom:9px}
+  .chkl input{width:auto;margin:0}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--accent);color:#1b1228;border:none;border-radius:10px;padding:11px 15px;font-size:14.5px;font-weight:800;text-decoration:none;cursor:pointer;font-family:inherit}
+  .btn:hover{filter:brightness(1.07)}
+  .btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--txt);font-weight:700}
+  .btn.big{width:100%;margin-top:14px;padding:13px;font-size:16px}
+  .btn.sm{padding:7px 12px;font-size:13px}
+  .city-results{margin-top:8px;display:flex;flex-direction:column;gap:5px}
+  .city-row{padding:9px 11px;background:var(--card2);border:1px solid var(--line);border-radius:9px;cursor:pointer;font-size:13.5px;display:flex;justify-content:space-between;gap:8px}
+  .city-row:hover{border-color:var(--accent);background:var(--accent-bg)}
+  .city-row small{color:var(--muted)}
+  .city-picked{margin-top:8px;padding:10px 12px;border:1px dashed var(--accent);border-radius:9px;font-size:13px;color:var(--accent);background:var(--accent-bg)}
+  .ferr{color:#F0A0A0;font-size:13px;margin-top:9px;min-height:1px}
+  .muted{color:var(--muted);font-size:12.5px}
+  .lk{color:var(--accent);cursor:pointer;text-decoration:underline;font-size:12.5px}
+  /* resultado */
+  .chart-head{text-align:center;margin:6px 0 13px}
+  .chart-head .nm{font-family:var(--font-display);font-size:24px;font-weight:700}
+  .chart-head .dt{color:var(--muted);font-size:13px;margin-top:3px}
+  .trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:13px}
+  .tcard{background:linear-gradient(160deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:12px;padding:13px 8px;text-align:center}
+  .tcard .tg{font-size:24px}
+  .tcard .tl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-tertiary);margin-top:4px;font-weight:700}
+  .tcard .ts{font-size:14.5px;font-weight:800;margin-top:2px;color:var(--accent)}
+  .tcard .td{font-size:11px;color:var(--muted)}
+  .wheel-card{padding:8px;display:flex;justify-content:center}
+  #wheel svg{width:100%;height:auto;max-width:420px;display:block}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{text-align:left;padding:7px 5px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;font-weight:700}
+  td .pg{font-size:16px;margin-right:5px}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  .ip{margin-bottom:9px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card2)}
+  .ip-h{display:flex;align-items:center;gap:9px;padding:11px 12px;cursor:pointer;font-weight:700}
+  .ip-h .pg{font-size:19px}
+  .ip-h .pin{font-size:12px;color:var(--accent);margin-left:auto;font-weight:700}
+  .ip-b{padding:0 12px;max-height:0;overflow:hidden;transition:max-height .25s,padding .25s;font-size:13.5px;color:var(--text-primary);line-height:1.6}
+  .ip.open .ip-b{max-height:340px;padding:0 12px 12px}
+  .tip{font-size:12.5px;color:var(--muted);background:var(--accent-bg);border-left:3px solid var(--accent);border-radius:8px;padding:11px 13px;margin:10px 0 22px;line-height:1.5}
+  .loadsp{display:inline-block;width:15px;height:15px;border:2px solid var(--accent);border-right-color:transparent;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  @media(max-width:520px){.wrap{padding:12px}.row3{grid-template-columns:1fr 1.3fr 1fr}.trio .td{display:none}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="tb-back" href="/">← <span>Deicy</span></a>
+  <div class="tb-brand"><div class="tb-mark">🔮</div><div><div class="tb-name">Carta Astral</div><div class="tb-tag">Astrología</div></div></div>
+  <div class="tb-moon" aria-hidden="true">🌙</div>
+</div>
+
+<!-- ===== FORMULARIO ===== -->
+<div class="wrap" id="formView">
+  <div class="hero">
+    <h1>Tu carta natal 🔮</h1>
+    <p>Calculamos tu Sol, Luna, Ascendente y todos tus planetas con precisión astronómica real. Solo necesitás tu fecha, hora y lugar de nacimiento.</p>
+  </div>
+  <div class="card" id="energia-card" style="border-color:var(--accent);background:radial-gradient(120% 140% at 90% 0%,rgba(167,139,196,.2),var(--card) 60%)"></div>
+  <div class="card">
+    <label>Nombre <span class="muted">(opcional)</span></label>
+    <input id="f-name" placeholder="Tu nombre" autocomplete="off">
+    <div class="row3">
+      <div><label>Día</label><input id="f-day" type="number" min="1" max="31" placeholder="DD" inputmode="numeric"></div>
+      <div><label>Mes</label><select id="f-month"></select></div>
+      <div><label>Año</label><input id="f-year" type="number" placeholder="AAAA" inputmode="numeric"></div>
+    </div>
+    <div class="row3">
+      <div><label>Hora</label><input id="f-hour" type="number" min="0" max="23" placeholder="HH" inputmode="numeric"></div>
+      <div><label>Min</label><input id="f-min" type="number" min="0" max="59" placeholder="MM" inputmode="numeric"></div>
+      <div class="chk"><label class="chkl"><input type="checkbox" id="f-notime"> No sé la hora</label></div>
+    </div>
+    <label>Ciudad de nacimiento</label>
+    <div class="row-city"><input id="f-city" placeholder="Ej: Rosario, Argentina" autocomplete="off"><button class="btn ghost" id="f-search" type="button">Buscar</button></div>
+    <div id="city-results" class="city-results"></div>
+    <div id="city-picked" class="city-picked" style="display:none"></div>
+    <div style="margin-top:7px"><span class="lk" id="manual-toggle">No encuentro mi ciudad → cargar a mano</span></div>
+    <div id="manual-box" style="display:none;margin-top:8px">
+      <div class="row3">
+        <div><label>Latitud</label><input id="m-lat" type="number" step="0.01" placeholder="-32.95"></div>
+        <div><label>Longitud</label><input id="m-lon" type="number" step="0.01" placeholder="-60.64"></div>
+        <div><label>Huso UTC</label><select id="m-off"></select></div>
+      </div>
+      <div class="muted" style="margin-top:5px">La latitud sur y la longitud oeste van con signo menos. En modo manual el horario de verano no se aplica solo.</div>
+      <button class="btn ghost sm" id="m-use" type="button" style="margin-top:8px">Usar estas coordenadas</button>
+    </div>
+    <button class="btn big" id="f-go" disabled>Ver mi carta 🔮</button>
+    <div id="f-err" class="ferr"></div>
+  </div>
+  <div class="tip">💡 La <b>hora exacta</b> define tu Ascendente y tus casas. Sin ella igual calculamos tus planetas, pero la Luna y el Ascendente pueden no ser precisos.</div>
+  <button class="btn ghost" id="open-compat" style="width:100%">💕 Compatibilidad de a dos</button>
+</div>
+
+<!-- ===== RESULTADO ===== -->
+<div class="wrap" id="chartView" style="display:none">
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" id="c-back">← Nueva carta</button><button class="btn sm" id="c-download">📸 Descargar imagen</button></div>
+  <div class="chart-head" id="chart-head"></div>
+  <div class="trio" id="trio"></div>
+  <div class="card wheel-card"><div id="wheel"></div></div>
+  <div class="card"><h3>Posiciones</h3><div id="postable"></div></div>
+  <div class="card"><h3>Tu interpretación</h3><div id="interp"></div></div>
+  <div class="tip" id="house-note"></div>
+</div>
+
+<div class="wrap" id="compatView" style="display:none">
+  <button class="btn ghost sm" id="cp-back">← Volver</button>
+  <div class="hero" style="margin-top:10px"><h1>Compatibilidad 💕</h1><p>Cargá dos personas y mirá qué tan compatibles son sus cartas. Con la fecha alcanza (la hora exacta afinaría la Luna).</p></div>
+  <div class="card"><h3>Persona A</h3>
+    <label>Nombre</label><input id="cpA-name" placeholder="Nombre" autocomplete="off">
+    <div class="row3">
+      <div><label>Día</label><input id="cpA-day" type="number" min="1" max="31" placeholder="DD" inputmode="numeric"></div>
+      <div><label>Mes</label><select id="cpA-month"></select></div>
+      <div><label>Año</label><input id="cpA-year" type="number" placeholder="AAAA" inputmode="numeric"></div>
+    </div>
+  </div>
+  <div class="card"><h3>Persona B</h3>
+    <label>Nombre</label><input id="cpB-name" placeholder="Nombre" autocomplete="off">
+    <div class="row3">
+      <div><label>Día</label><input id="cpB-day" type="number" min="1" max="31" placeholder="DD" inputmode="numeric"></div>
+      <div><label>Mes</label><select id="cpB-month"></select></div>
+      <div><label>Año</label><input id="cpB-year" type="number" placeholder="AAAA" inputmode="numeric"></div>
+    </div>
+  </div>
+  <button class="btn big" id="cp-go">Ver compatibilidad 💕</button>
+  <div id="cp-err" class="ferr"></div>
+  <div id="cp-result" style="margin-top:6px"></div>
+</div>
+
+<script src="astronomy.min.js"></script>
+<script src="interp.js"></script>
+<script>
+(function(){
+"use strict";
+var A=window.Astronomy;
+var D2R=Math.PI/180, R2D=180/Math.PI;
+function norm(x){return ((x%360)+360)%360;}
+var SIGNS=[
+ {n:'Aries',g:'♈',e:'fuego',ess:'iniciativa, coraje y ganas de ir al frente'},
+ {n:'Tauro',g:'♉',e:'tierra',ess:'estabilidad, placer y constancia'},
+ {n:'Géminis',g:'♊',e:'aire',ess:'curiosidad, palabra y versatilidad'},
+ {n:'Cáncer',g:'♋',e:'agua',ess:'sensibilidad, hogar y necesidad de proteger'},
+ {n:'Leo',g:'♌',e:'fuego',ess:'brillo, creatividad y un corazón grande'},
+ {n:'Virgo',g:'♍',e:'tierra',ess:'detalle, servicio y ganas de mejorar todo'},
+ {n:'Libra',g:'♎',e:'aire',ess:'equilibrio, vínculos y estética'},
+ {n:'Escorpio',g:'♏',e:'agua',ess:'intensidad, profundidad y transformación'},
+ {n:'Sagitario',g:'♐',e:'fuego',ess:'aventura, búsqueda de sentido y libertad'},
+ {n:'Capricornio',g:'♑',e:'tierra',ess:'ambición, estructura y disciplina'},
+ {n:'Acuario',g:'♒',e:'aire',ess:'originalidad, ideas y espíritu de comunidad'},
+ {n:'Piscis',g:'♓',e:'agua',ess:'imaginación, empatía y un toque místico'}
+];
+var ELC={fuego:'var(--fuego)',tierra:'var(--tierra)',aire:'var(--aire)',agua:'var(--agua)'};
+var PLAN=[
+ {k:'Sol',g:'☉',role:'tu identidad y lo que te hace brillar'},
+ {k:'Luna',g:'☽',role:'tu mundo emocional y lo que te da seguridad'},
+ {k:'Mercurio',g:'☿',role:'cómo pensás y te comunicás'},
+ {k:'Venus',g:'♀',role:'cómo amás y qué disfrutás'},
+ {k:'Marte',g:'♂',role:'tu energía y cómo vas por lo que querés'},
+ {k:'Júpiter',g:'♃',role:'dónde tenés suerte y querés crecer'},
+ {k:'Saturno',g:'♄',role:'tus responsabilidades y aprendizajes'},
+ {k:'Urano',g:'♅',role:'dónde sos original y rompés moldes'},
+ {k:'Neptuno',g:'♆',role:'tu imaginación, sueños y espiritualidad'},
+ {k:'Plutón',g:'♇',role:'tu poder de transformación'}
+];
+var ASC_ROLE='la primera impresión que das y cómo encarás la vida';
+function bodyOf(i){return [A.Body.Sun,A.Body.Moon,A.Body.Mercury,A.Body.Venus,A.Body.Mars,A.Body.Jupiter,A.Body.Saturn,A.Body.Uranus,A.Body.Neptune,A.Body.Pluto][i];}
+function eclLon(body,t){var v=A.GeoVector(body,t,true);var e=A.RotateVector(A.Rotation_EQJ_ECT(t),v);return norm(Math.atan2(e.y,e.x)*R2D);}
+function signOf(lon){return Math.floor(norm(lon)/30);}
+function fmtDeg(lon){lon=norm(lon);var s=signOf(lon),d=lon-s*30;var dg=Math.floor(d),mn=Math.round((d-dg)*60);if(mn===60){mn=0;dg++;}return {sign:s,txt:dg+'°'+String(mn).padStart(2,'0')+"'"};}
+function tzOffMin(tz,date){try{var dtf=new Intl.DateTimeFormat('en-US',{timeZone:tz,hour12:false,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});var p={};dtf.formatToParts(date).forEach(function(x){p[x.type]=x.value;});var h=p.hour==='24'?0:+p.hour;var asUTC=Date.UTC(+p.year,+p.month-1,+p.day,h,+p.minute,+p.second);return Math.round((asUTC-date.getTime())/60000);}catch(e){return null;}}
+function localToUTC(y,mo,d,hh,mi,tz,fixedOffMin){
+  var guess=Date.UTC(y,mo-1,d,hh,mi,0);
+  if(tz){var off=tzOffMin(tz,new Date(guess));if(off==null)off=0;var utc=guess-off*60000;off=tzOffMin(tz,new Date(utc));utc=guess-off*60000;return new Date(utc);}
+  return new Date(guess-(fixedOffMin||0)*60000);
+}
+function computeChart(o){
+  var t=A.MakeTime(localToUTC(o.y,o.mo,o.d,o.hh,o.mi,o.tz,o.off));
+  var pos=[];
+  for(var i=0;i<PLAN.length;i++){
+    var L; if(i===0)L=A.SunPosition(t).elon; else if(i===1)L=A.EclipticGeoMoon(t).lon; else L=eclLon(bodyOf(i),t);
+    pos.push(norm(L));
+  }
+  var res={pos:pos,hasTime:o.hasTime,asc:null,mc:null,ascSign:0};
+  if(o.hasTime && o.lat!=null && o.lon!=null){
+    var gast=A.SiderealTime(t);
+    var ramc=norm((gast+o.lon/15)*15);
+    var eps=A.e_tilt(t).tobl;
+    var R=ramc*D2R,E=eps*D2R,P=o.lat*D2R;
+    var mc=norm(Math.atan2(Math.sin(R),Math.cos(R)*Math.cos(E))*R2D);
+    var asc=norm(Math.atan2(Math.cos(R),-(Math.sin(R)*Math.cos(E)+Math.tan(P)*Math.sin(E)))*R2D);
+    res.asc=asc;res.mc=mc;res.ascSign=signOf(asc);
+  }
+  return res;
+}
+function houseOf(lon,res){if(!res.hasTime||res.asc==null)return null;return ((signOf(lon)-res.ascSign+12)%12)+1;}
+function pt(cx,cy,r,a){a=a*D2R;return [cx+r*Math.cos(a), cy - r*Math.sin(a)];}
+function arc(cx,cy,r,a0,a1){var n=Math.max(2,Math.ceil(Math.abs(a1-a0)/6)),p=[];for(var i=0;i<=n;i++){p.push(pt(cx,cy,r,a0+(a1-a0)*i/n));}return p;}
+function sector(cx,cy,r1,r2,a0,a1){var o=arc(cx,cy,r2,a0,a1),ii=arc(cx,cy,r1,a1,a0);return 'M'+o.concat(ii).map(function(q){return q[0].toFixed(1)+','+q[1].toFixed(1);}).join(' L')+' Z';}
+function drawWheel(res){
+  var cx=175,cy=175,rOut=170,rSign=143,rHouseR=138,rPlanet=108,rHubLine=46;
+  var ascLon=res.hasTime?res.asc:0;
+  function ang(lon){return norm(180+(lon-ascLon));}
+  var s='<svg viewBox="0 0 350 350" xmlns="http://www.w3.org/2000/svg" font-family="Nunito, sans-serif">';
+  s+='<circle cx="175" cy="175" r="170" fill="rgba(20,17,30,.5)" stroke="var(--accent)" stroke-opacity=".5"/>';
+  for(var k=0;k<12;k++){
+    var a0=ang(k*30),a1=ang(k*30+30); if(a1<a0)a1+=360;
+    s+='<path d="'+sector(cx,cy,rSign,rOut,a0,a1)+'" fill="'+ELC[SIGNS[k].e]+'" fill-opacity=".18" stroke="var(--border-strong)" stroke-width=".7"/>';
+    var gm=pt(cx,cy,(rSign+rOut)/2,(a0+a1)/2);
+    s+='<text x="'+gm[0].toFixed(1)+'" y="'+(gm[1]+6).toFixed(1)+'" text-anchor="middle" font-size="19" fill="'+ELC[SIGNS[k].e]+'">'+SIGNS[k].g+'</text>';
+    if(res.hasTime){var hn=((k-res.ascSign+12)%12)+1;var hm=pt(cx,cy,rSign-13,(a0+a1)/2);s+='<text x="'+hm[0].toFixed(1)+'" y="'+(hm[1]+4).toFixed(1)+'" text-anchor="middle" font-size="11" fill="var(--text-tertiary)" font-weight="700">'+hn+'</text>';}
+  }
+  s+='<circle cx="175" cy="175" r="'+rHouseR+'" fill="none" stroke="var(--border-strong)" stroke-width=".7"/>';
+  for(var b=0;b<12;b++){var ab=ang(b*30);var p1=pt(cx,cy,rHubLine,ab),p2=pt(cx,cy,rSign,ab);s+='<line x1="'+p1[0].toFixed(1)+'" y1="'+p1[1].toFixed(1)+'" x2="'+p2[0].toFixed(1)+'" y2="'+p2[1].toFixed(1)+'" stroke="var(--border-strong)" stroke-width=".6"/>';}
+  if(res.hasTime){
+    var aA=ang(res.asc);var ea=pt(cx,cy,rOut,aA),ia=pt(cx,cy,rHubLine,aA);
+    s+='<line x1="'+ia[0].toFixed(1)+'" y1="'+ia[1].toFixed(1)+'" x2="'+ea[0].toFixed(1)+'" y2="'+ea[1].toFixed(1)+'" stroke="var(--accent)" stroke-width="2"/>';
+    var la=pt(cx,cy,rOut-2,aA);s+='<text x="'+(la[0]-13).toFixed(1)+'" y="'+(la[1]+4).toFixed(1)+'" font-size="11" fill="var(--accent)" font-weight="800">ASC</text>';
+    var aM=ang(res.mc);var em=pt(cx,cy,rOut,aM),im=pt(cx,cy,rHubLine,aM);
+    s+='<line x1="'+im[0].toFixed(1)+'" y1="'+im[1].toFixed(1)+'" x2="'+em[0].toFixed(1)+'" y2="'+em[1].toFixed(1)+'" stroke="var(--accent-2)" stroke-width="1.6" stroke-dasharray="4 3"/>';
+    var lm=pt(cx,cy,rOut-12,aM);s+='<text x="'+lm[0].toFixed(1)+'" y="'+lm[1].toFixed(1)+'" font-size="10" fill="var(--accent-2)" font-weight="800" text-anchor="middle">MC</text>';
+  }
+  var order=PLAN.map(function(p,i){return {i:i,lon:res.pos[i]};}).sort(function(a,b){return ang(a.lon)-ang(b.lon);});
+  var lastA=-99,rp=rPlanet;
+  for(var j=0;j<order.length;j++){
+    var a=ang(order[j].lon);
+    if(a-lastA<11){rp-=15;if(rp<rPlanet-30)rp=rPlanet;}else rp=rPlanet;
+    lastA=a;
+    var pp=pt(cx,cy,rp,a);
+    s+='<circle cx="'+pp[0].toFixed(1)+'" cy="'+pp[1].toFixed(1)+'" r="12" fill="var(--card2)" stroke="var(--accent)" stroke-width="1"/>';
+    s+='<text x="'+pp[0].toFixed(1)+'" y="'+(pp[1]+5).toFixed(1)+'" text-anchor="middle" font-size="14" fill="var(--text-primary)">'+PLAN[order[j].i].g+'</text>';
+    var tk1=pt(cx,cy,rSign-2,a),tk2=pt(cx,cy,rSign-8,a);
+    s+='<line x1="'+tk1[0].toFixed(1)+'" y1="'+tk1[1].toFixed(1)+'" x2="'+tk2[0].toFixed(1)+'" y2="'+tk2[1].toFixed(1)+'" stroke="var(--accent)" stroke-width="1"/>';
+  }
+  s+='<circle cx="175" cy="175" r="'+rHubLine+'" fill="var(--card)" stroke="var(--border-strong)"/><text x="175" y="182" text-anchor="middle" font-size="22">✨</text>';
+  s+='</svg>';
+  return s;
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+function renderChart(o,res){
+  CURRENT={o:o,res:res};
+  var head=document.getElementById('chart-head');
+  var sun=res.pos[0],moon=res.pos[1];
+  var dd=String(o.d).padStart(2,'0')+'/'+String(o.mo).padStart(2,'0')+'/'+o.y;
+  var hh=o.hasTime?(' · '+String(o.hh).padStart(2,'0')+':'+String(o.mi).padStart(2,'0')):' · sin hora';
+  head.innerHTML='<div class="nm">'+(o.name?esc(o.name):'Tu carta')+'</div><div class="dt">'+dd+hh+' · '+esc(o.place||'')+'</div>';
+  function tcard(g,lab,lon){var f=fmtDeg(lon);return '<div class="tcard"><div class="tg">'+g+'</div><div class="tl">'+lab+'</div><div class="ts">'+SIGNS[f.sign].n+'</div><div class="td">'+f.txt+'</div></div>';}
+  var trio='';
+  trio+=tcard('☉','Sol',sun);
+  trio+=tcard('☽','Luna',moon);
+  if(res.hasTime)trio+=tcard('↑','Asc',res.asc); else trio+='<div class="tcard"><div class="tg">↑</div><div class="tl">Asc</div><div class="ts" style="font-size:12px">sin hora</div><div class="td">cargá la hora</div></div>';
+  document.getElementById('trio').innerHTML=trio;
+  document.getElementById('wheel').innerHTML=drawWheel(res);
+  var rows='';
+  for(var i=0;i<PLAN.length;i++){var f=fmtDeg(res.pos[i]);var h=houseOf(res.pos[i],res);rows+='<tr><td><span class="pg">'+PLAN[i].g+'</span>'+PLAN[i].k+'</td><td>'+SIGNS[f.sign].g+' '+SIGNS[f.sign].n+'</td><td class="num">'+f.txt+'</td><td class="num">'+(h?('Casa '+h):'—')+'</td></tr>';}
+  if(res.hasTime){var fa=fmtDeg(res.asc),fm=fmtDeg(res.mc);rows+='<tr><td><span class="pg">↑</span>Ascendente</td><td>'+SIGNS[fa.sign].g+' '+SIGNS[fa.sign].n+'</td><td class="num">'+fa.txt+'</td><td class="num">Casa 1</td></tr>';rows+='<tr><td><span class="pg">⊕</span>Medio Cielo</td><td>'+SIGNS[fm.sign].g+' '+SIGNS[fm.sign].n+'</td><td class="num">'+fm.txt+'</td><td class="num">Casa 10</td></tr>';}
+  document.getElementById('postable').innerHTML='<table><thead><tr><th>Astro</th><th>Signo</th><th class="num">Grado</th><th class="num">Casa</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  function ipBlock(g,name,key,role,lon,open){var f=fmtDeg(lon);var s=f.sign;var dict=(window.INTERP&&window.INTERP[key]);var txt=(dict&&dict[s])?dict[s]:('Tu '+role+' se expresa en '+SIGNS[s].n+': '+SIGNS[s].ess+'.');return '<div class="ip'+(open?' open':'')+'"><div class="ip-h" onclick="this.parentNode.classList.toggle(\'open\')"><span class="pg">'+g+'</span>'+name+'<span class="pin">'+SIGNS[s].n+' '+f.txt+'</span></div><div class="ip-b">'+txt+'</div></div>';}
+  var ip='';
+  ip+=ipBlock('☉','Sol','Sol',PLAN[0].role,res.pos[0],true);
+  ip+=ipBlock('☽','Luna','Luna',PLAN[1].role,res.pos[1],true);
+  if(res.hasTime)ip+=ipBlock('↑','Ascendente','Ascendente',ASC_ROLE,res.asc,true);
+  for(var p=2;p<PLAN.length;p++)ip+=ipBlock(PLAN[p].g,PLAN[p].k,PLAN[p].k,PLAN[p].role,res.pos[p],false);
+  document.getElementById('interp').innerHTML=ip;
+  var hnote=document.getElementById('house-note');
+  if(res.hasTime)hnote.innerHTML='🏠 Casas en sistema <b>Signo Completo</b> (Whole Sign): cada signo es una casa, empezando por tu Ascendente. Posiciones con cálculo astronómico real.';
+  else hnote.innerHTML='⏰ Sin hora no se calculan Ascendente ni casas, y la Luna es aproximada. Con tu hora de nacimiento vas a ver la carta completa.';
+  document.getElementById('formView').style.display='none';
+  document.getElementById('chartView').style.display='';
+  window.scrollTo(0,0);
+}
+var picked=null;
+function $(id){return document.getElementById(id);}
+(function initForm(){
+  var ms=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  $('f-month').innerHTML=ms.map(function(m,i){return '<option value="'+(i+1)+'">'+m+'</option>';}).join('');
+  var off='';for(var u=-12;u<=14;u++){off+='<option value="'+u+'"'+(u===-3?' selected':'')+'>UTC'+(u>=0?'+':'')+u+'</option>';}
+  $('m-off').innerHTML=off;
+})();
+function setPicked(p){picked=p;var el=$('city-picked');el.style.display='';el.innerHTML='📍 '+esc(p.label);$('city-results').innerHTML='';$('f-go').disabled=false;}
+$('f-search').onclick=function(){doSearch();};
+$('f-city').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();doSearch();}});
+function doSearch(){
+  var q=$('f-city').value.trim();if(q.length<2){return;}
+  var box=$('city-results');box.innerHTML='<div class="muted"><span class="loadsp"></span> Buscando…</div>';
+  fetch('https://geocoding-api.open-meteo.com/v1/search?count=6&language=es&format=json&name='+encodeURIComponent(q))
+   .then(function(r){return r.json();})
+   .then(function(j){
+     if(!j.results||!j.results.length){box.innerHTML='<div class="muted">No encontré esa ciudad. Probá con el país (ej: “Paraná, Argentina”) o cargala a mano.</div>';return;}
+     box.innerHTML=j.results.map(function(c,idx){
+       var sub=[c.admin1,c.country].filter(Boolean).join(', ');
+       window['__c'+idx]={lat:c.latitude,lon:c.longitude,tz:c.timezone,label:c.name+(sub?', '+sub:'')};
+       return '<div class="city-row" onclick="window.__pick('+idx+')"><span>'+esc(c.name)+'</span><small>'+esc(sub)+'</small></div>';
+     }).join('');
+   })
+   .catch(function(){box.innerHTML='<div class="muted">No pude conectar al buscador. Usá “cargar a mano” con tus coordenadas.</div>';});
+}
+window.__pick=function(idx){var c=window['__c'+idx];if(c)setPicked({lat:c.lat,lon:c.lon,tz:c.tz,label:c.label});};
+$('manual-toggle').onclick=function(){var b=$('manual-box');b.style.display=b.style.display==='none'?'':'none';};
+$('m-use').onclick=function(){
+  var la=parseFloat($('m-lat').value),lo=parseFloat($('m-lon').value),of=parseInt($('m-off').value,10);
+  if(isNaN(la)||isNaN(lo)){$('f-err').textContent='Cargá latitud y longitud.';return;}
+  $('f-err').textContent='';setPicked({lat:la,lon:lo,tz:null,off:of*60,label:'Coordenadas '+la.toFixed(2)+', '+lo.toFixed(2)});
+};
+$('f-notime').onchange=function(){var on=this.checked;$('f-hour').disabled=on;$('f-min').disabled=on;};
+$('f-go').onclick=function(){
+  var err=$('f-err');err.textContent='';
+  var d=parseInt($('f-day').value,10),mo=parseInt($('f-month').value,10),y=parseInt($('f-year').value,10);
+  var noTime=$('f-notime').checked;
+  var hh=noTime?12:parseInt($('f-hour').value,10),mi=noTime?0:parseInt($('f-min').value,10);
+  if(!d||!y||d<1||d>31){err.textContent='Revisá el día y el año.';return;}
+  if(y<1900||y>2100){err.textContent='El año tiene que estar entre 1900 y 2100.';return;}
+  if(!noTime&&(isNaN(hh)||isNaN(mi)||hh<0||hh>23||mi<0||mi>59)){err.textContent='Revisá la hora (o marcá “No sé la hora”).';return;}
+  if(!picked){err.textContent='Elegí tu ciudad de nacimiento.';return;}
+  try{
+    var o={name:$('f-name').value.trim(),y:y,mo:mo,d:d,hh:hh,mi:mi,hasTime:!noTime,lat:picked.lat,lon:picked.lon,tz:picked.tz,off:picked.off,place:picked.label};
+    var res=computeChart(o);
+    renderChart(o,res);
+  }catch(e){err.textContent='Ups, algo falló al calcular: '+(e&&e.message?e.message:e);}
+};
+$('c-back').onclick=function(){document.getElementById('chartView').style.display='none';document.getElementById('formView').style.display='';window.scrollTo(0,0);};
+var CURRENT=null;
+function buildPosterSVG(o,res){
+  var W=760, rows=PLAN.length+(res.hasTime?2:0), tableStart=775, yEnd=tableStart+rows*30, H=yEnd+66;
+  var name=(o.name||'Tu carta').toUpperCase();
+  var ms=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  var sub='CARTA NATAL — '+o.d+' DE '+(ms[o.mo-1]||'').toUpperCase()+' DE '+o.y+(o.hasTime?(' · '+String(o.hh).padStart(2,'0')+':'+String(o.mi).padStart(2,'0')):'')+(o.place?(' · '+o.place.toUpperCase()):'');
+  var w=drawWheel(res).replace(/<svg[^>]*>/,'').replace('</svg>','');
+  var s='<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" font-family="Lora, Georgia, serif">';
+  s+='<rect width="'+W+'" height="'+H+'" fill="#110F18"/>';
+  s+='<g fill="#ffffff" opacity=".5">';for(var q=0;q<46;q++){s+='<circle cx="'+((q*97)%760)+'" cy="'+((q*53)%H)+'" r="'+((q%5===0)?1.3:0.7)+'"/>';}s+='</g>';
+  s+='<text x="380" y="76" text-anchor="middle" font-size="40" font-weight="700" fill="var(--accent)" letter-spacing="3">'+esc(name)+'</text>';
+  s+='<line x1="150" y1="94" x2="610" y2="94" stroke="var(--accent-2)" stroke-opacity=".5"/>';
+  s+='<text x="380" y="120" text-anchor="middle" font-size="12.5" fill="var(--text-secondary)" font-family="Nunito, sans-serif" letter-spacing="1.5">'+esc(sub)+'</text>';
+  s+='<text x="380" y="152" text-anchor="middle" font-size="16" fill="var(--accent)">✦ ✧ ✦</text>';
+  s+='<svg x="100" y="170" width="560" height="560" viewBox="0 0 350 350" font-family="Nunito, sans-serif">'+w+'</svg>';
+  var y=tableStart;
+  function row(g,nm,sg,dg,ho){var r='';r+='<text x="64" y="'+y+'" font-size="17" fill="var(--text-primary)">'+g+'</text>';r+='<text x="98" y="'+y+'" font-size="15" font-weight="700" fill="var(--text-primary)" font-family="Nunito, sans-serif">'+nm+'</text>';r+='<text x="320" y="'+y+'" font-size="15" fill="var(--accent)" font-family="Nunito, sans-serif">'+sg+'</text>';r+='<text x="560" y="'+y+'" font-size="15" fill="var(--text-secondary)" font-family="Nunito, sans-serif" text-anchor="end">'+dg+'</text>';r+='<text x="696" y="'+y+'" font-size="13.5" fill="var(--text-secondary)" font-family="Nunito, sans-serif" text-anchor="end">'+(ho||'')+'</text>';r+='<line x1="60" y1="'+(y+9)+'" x2="700" y2="'+(y+9)+'" stroke="var(--border-strong)" stroke-width=".7"/>';y+=30;return r;}
+  for(var k=0;k<PLAN.length;k++){var f=fmtDeg(res.pos[k]);var h=houseOf(res.pos[k],res);s+=row(PLAN[k].g,PLAN[k].k,SIGNS[f.sign].g+' '+SIGNS[f.sign].n,f.txt,h?('Casa '+h):'—');}
+  if(res.hasTime){var fa=fmtDeg(res.asc),fm=fmtDeg(res.mc);s+=row('↑','Ascendente',SIGNS[fa.sign].g+' '+SIGNS[fa.sign].n,fa.txt,'Casa 1');s+=row('MC','Medio Cielo',SIGNS[fm.sign].g+' '+SIGNS[fm.sign].n,fm.txt,'Casa 10');}
+  var f0=fmtDeg(res.pos[0]),f1=fmtDeg(res.pos[1]);
+  var foot='Sol en '+SIGNS[f0.sign].n+' · Luna en '+SIGNS[f1.sign].n+(res.hasTime?(' · Asc en '+SIGNS[fmtDeg(res.asc).sign].n):'');
+  s+='<text x="380" y="'+(y+22)+'" text-anchor="middle" font-size="15" font-style="italic" fill="var(--accent)">'+esc(foot)+'</text>';
+  s+='<text x="380" y="'+(y+46)+'" text-anchor="middle" font-size="11" fill="var(--text-tertiary)" font-family="Nunito, sans-serif">Hecha con la abeja Deicy · posiciones con efemérides reales</text>';
+  s+='</svg>';
+  var M={'--accent-2':'#8B7BB8','--accent':'#B79AD6','--text-primary':'#EDE8FA','--text-secondary':'#A895C8','--text-tertiary':'#6F6196','--border-strong':'#5a4d73','--card2':'#222030','--card':'#1A1726','--fuego':'#E0996B','--tierra':'#9DC9A8','--aire':'#C9A8E6','--agua':'#8FB8D8','--bg':'#110F18'};
+  s=s.replace(/var\((--[a-z0-9-]+)\)/g,function(mm,v){return M[v]||mm;});
+  return {svg:s,w:W,h:H};
+}
+window.__buildPoster=buildPosterSVG;
+function dlSVG(svg,fname){var a=document.createElement('a');a.download=fname.replace('.png','.svg');a.href=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));document.body.appendChild(a);a.click();a.remove();}
+function downloadPoster(){
+  if(!CURRENT)return;
+  var btn=document.getElementById('c-download');var old=btn?btn.textContent:'';if(btn){btn.textContent='Generando…';btn.disabled=true;}
+  function done(){if(btn){btn.textContent=old;btn.disabled=false;}}
+  var P=buildPosterSVG(CURRENT.o,CURRENT.res);
+  var fname='Carta Natal'+(CURRENT.o.name?' - '+CURRENT.o.name:'')+'.png';
+  var url=URL.createObjectURL(new Blob([P.svg],{type:'image/svg+xml;charset=utf-8'}));
+  var img=new Image();
+  img.onload=function(){
+    try{var sc=2;var c=document.createElement('canvas');c.width=P.w*sc;c.height=P.h*sc;var cx=c.getContext('2d');cx.fillStyle='#110F18';cx.fillRect(0,0,c.width,c.height);cx.setTransform(sc,0,0,sc,0,0);cx.drawImage(img,0,0,P.w,P.h);URL.revokeObjectURL(url);
+      c.toBlob(function(b){if(!b){dlSVG(P.svg,fname);done();return;}var a=document.createElement('a');a.download=fname;a.href=URL.createObjectURL(b);document.body.appendChild(a);a.click();a.remove();done();},'image/png');
+    }catch(e){URL.revokeObjectURL(url);dlSVG(P.svg,fname);done();}
+  };
+  img.onerror=function(){URL.revokeObjectURL(url);dlSVG(P.svg,fname);done();};
+  img.src=url;
+}
+var _cd=document.getElementById('c-download');if(_cd)_cd.onclick=downloadPoster;
+var MOON_VIBES=[
+ 'energía y arranque: buen día para shows activos y para ir al frente. No te frenes.',
+ 'calma y placer: día para mimarte, outfits cómodos y clientes habitué.',
+ 'charla y chispa: día ideal para conversar, coquetear y enganchar gente nueva.',
+ 'sensibilidad: día más emocional, conectá desde lo tierno y cuidate vos también.',
+ 'brillo total: ¡día para producirte y lucirte! Shows con drama y corona.',
+ 'orden y foco: buen día para organizar, cargar datos y pulir detalles.',
+ 'encanto y vínculos: día social, lindo para fidelizar clientes y verte divina.',
+ 'intensidad: día magnético y profundo, los privados pueden rendir fuerte.',
+ 'aventura y humor: día relajado y divertido, mostrate espontánea.',
+ 'ambición: día productivo, ponete metas y andá por el billete.',
+ 'originalidad: probá algo distinto, un show creativo o fuera de lo común.',
+ 'fantasía y suavidad: día soñador, ideal para sensualidad y conexión íntima.'
+];
+function todaySky(){
+  var now=new Date(); var t=A.MakeTime(now);
+  var sun=A.SunPosition(t).elon, moon=A.EclipticGeoMoon(t).lon;
+  var t2=A.MakeTime(new Date(now.getTime()+86400000));
+  var m1=eclLon(A.Body.Mercury,t), m2=eclLon(A.Body.Mercury,t2);
+  var dd=((m2-m1+540)%360)-180;
+  return {sun:norm(sun),moon:norm(moon),retro:dd<0};
+}
+function renderEnergia(){
+  var el=document.getElementById('energia-card'); if(!el)return;
+  try{
+    var sk=todaySky(); var ms=signOf(sk.moon), ss=signOf(sk.sun);
+    var d=new Date(); var dn=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'][d.getDay()];
+    var fecha=dn+' '+d.getDate()+'/'+(d.getMonth()+1);
+    el.innerHTML='<div style="display:flex;align-items:center;gap:11px;margin-bottom:9px"><span style="font-size:27px;filter:drop-shadow(0 0 7px var(--accent))">🌙</span><div><div style="font-family:var(--font-display);font-size:17px;font-weight:600">Energía de hoy</div><div class="muted" style="font-size:11.5px;text-transform:capitalize">'+fecha+'</div></div></div>'
+      +'<div style="font-size:14px;line-height:1.55"><b style="color:var(--accent)">Luna en '+SIGNS[ms].n+'</b> — '+MOON_VIBES[ms]+'</div>'
+      +'<div class="muted" style="margin-top:7px;font-size:12.5px">☉ Sol en '+SIGNS[ss].n+(sk.retro?' &nbsp;·&nbsp; <b style="color:#F0B888">☿ Mercurio retrógrado</b>: ojo con malentendidos, mensajes y la tecnología.':'')+'</div>';
+  }catch(e){ el.style.display='none'; }
+}
+try{ renderEnergia(); }catch(e){}
+function computePersona(y,mo,d){var t=A.MakeTime(new Date(Date.UTC(y,mo-1,d,12,0,0)));return {sun:norm(A.SunPosition(t).elon),moon:norm(A.EclipticGeoMoon(t).lon),venus:eclLon(A.Body.Venus,t),mars:eclLon(A.Body.Mars,t),merc:eclLon(A.Body.Mercury,t)};}
+function aspectOf(a,b){var sep=Math.abs(a-b)%360;if(sep>180)sep=360-sep;var D=[[0,8,'conj'],[60,5,'sext'],[90,6,'sq'],[120,7,'tri'],[180,7,'opp']];for(var i=0;i<D.length;i++)if(Math.abs(sep-D[i][0])<=D[i][1])return D[i][2];return null;}
+function harm(a){return a==='tri'||a==='sext'?1:a==='conj'?0.65:(a==='sq'||a==='opp')?0.2:0;}
+function elemCompat(e1,e2){if(e1===e2)return 1;var ok={'fuego-aire':1,'aire-fuego':1,'tierra-agua':1,'agua-tierra':1};return ok[e1+'-'+e2]?0.75:0.25;}
+function compatScore(X,Y){
+  var pairs=[['sun','sun'],['sun','moon'],['moon','sun'],['moon','moon'],['venus','mars'],['mars','venus'],['venus','venus'],['sun','venus'],['venus','sun'],['merc','merc']];
+  var score=50; pairs.forEach(function(p){var as=aspectOf(X[p[0]],Y[p[1]]);if(as)score+=harm(as)*5;});
+  var eA=SIGNS[signOf(X.sun)].e,eB=SIGNS[signOf(Y.sun)].e; score+=(elemCompat(eA,eB)-0.5)*24;
+  var lines=[];
+  var sm=aspectOf(X.sun,Y.moon)||aspectOf(X.moon,Y.sun);
+  if(sm==='tri'||sm==='sext'||sm==='conj')lines.push('💛 Sol–Luna en armonía: se admiran y se entienden, hay comodidad emocional.');
+  var vm=aspectOf(X.venus,Y.mars)||aspectOf(X.mars,Y.venus);
+  if(vm)lines.push((vm==='sq'||vm==='opp')?'🔥 Venus–Marte en tensión: química intensa y atracción con chispa.':'🔥 Venus–Marte conectados: hay atracción y deseo.');
+  var mm=aspectOf(X.moon,Y.moon);
+  if(mm==='tri'||mm==='sext'||mm==='conj')lines.push('🌊 Lunas en sintonía: se sienten en casa, gran entendimiento emocional.');
+  var ss=aspectOf(X.sun,Y.sun);
+  if(ss==='sq'||ss==='opp')lines.push('⚡ Soles en tensión: dos personalidades fuertes, pasión pero también choques.');
+  else if(ss==='tri'||ss==='sext')lines.push('☀️ Soles en armonía: van para el mismo lado.');
+  var vv=aspectOf(X.venus,Y.venus);
+  if(vv==='tri'||vv==='sext'||vv==='conj')lines.push('💕 Gustos parecidos: disfrutan de las mismas cosas.');
+  if(elemCompat(eA,eB)>=0.75)lines.push('🌟 Elementos que fluyen ('+eA+' + '+eB+').');
+  else if(elemCompat(eA,eB)<0.5)lines.push('🌗 Elementos distintos ('+eA+' + '+eB+'): se complementan pero requiere laburo.');
+  return {score:Math.max(20,Math.min(99,Math.round(score))),lines:lines};
+}
+function readP(p){var d=parseInt($(p+'-day').value,10),mo=parseInt($(p+'-month').value,10),y=parseInt($(p+'-year').value,10);if(!d||!y||d<1||d>31||y<1900||y>2100)return null;return {y:y,mo:mo,d:d,name:$(p+'-name').value.trim()};}
+function renderCompat(){
+  var err=$('cp-err');err.textContent='';
+  var a=readP('cpA'),b=readP('cpB');
+  if(!a||!b){err.textContent='Completá día, mes y año de las dos personas.';return;}
+  var X=computePersona(a.y,a.mo,a.d),Y=computePersona(b.y,b.mo,b.d);
+  var r=compatScore(X,Y);
+  var v=r.score>=82?'¡Súper compatibles! 💖':r.score>=68?'Muy buena compatibilidad 💕':r.score>=54?'Buena compatibilidad ✨':'Se complementan con trabajo 🌗 (la tensión también es chispa)';
+  var nA=esc(a.name||'Persona A'),nB=esc(b.name||'Persona B');
+  var html='<div class="card" style="text-align:center"><div style="font-size:13px;color:var(--muted)">'+nA+' &nbsp;💕&nbsp; '+nB+'</div>'
+    +'<div style="font-family:var(--font-display);font-size:46px;font-weight:700;color:var(--accent);line-height:1.1;margin:4px 0">'+r.score+'%</div>'
+    +'<div style="font-size:14.5px;font-weight:700">'+v+'</div>'
+    +'<div style="height:10px;border-radius:6px;background:var(--card2);overflow:hidden;margin:13px 2px 2px"><i style="display:block;height:100%;width:'+r.score+'%;background:linear-gradient(90deg,var(--accent-2),var(--accent))"></i></div></div>'
+    +'<div class="card"><h3>Conexiones</h3>'+(r.lines.length?r.lines.map(function(l){return '<div style="padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px;line-height:1.5">'+l+'</div>';}).join(''):'<div class="muted">Sin aspectos destacados entre sus planetas personales.</div>')
+    +'<div class="muted" style="margin-top:9px;font-size:11.5px">Compatibilidad por signos (Sol, Luna, Venus, Marte). Es una guía divertida, no una sentencia 💜</div></div>';
+  $('cp-result').innerHTML=html; $('cp-result').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+(function initCompat(){var ms=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];var opt=ms.map(function(m,i){return '<option value="'+(i+1)+'">'+m+'</option>';}).join('');var a=$('cpA-month'),b=$('cpB-month');if(a)a.innerHTML=opt;if(b)b.innerHTML=opt;})();
+var _oc=$('open-compat');if(_oc)_oc.onclick=function(){document.getElementById('formView').style.display='none';document.getElementById('compatView').style.display='';window.scrollTo(0,0);};
+var _cb=$('cp-back');if(_cb)_cb.onclick=function(){document.getElementById('compatView').style.display='none';document.getElementById('formView').style.display='';window.scrollTo(0,0);};
+var _cg=$('cp-go');if(_cg)_cg.onclick=renderCompat;
+})();
+</script>
+</body>
+</html>

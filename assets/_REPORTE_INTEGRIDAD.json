@@ -1,0 +1,306 @@
+[
+ {
+  "file": "assets/icono-touch.png",
+  "bytes": 50104,
+  "sha256": "7bdaf989572f9996517f718336ead5e7142db26be83a0553aa5ea4eb81425ee6",
+  "mime": "image/png",
+  "dup": false
+ },
+ {
+  "file": "assets/icono-fav.png",
+  "bytes": 56010,
+  "sha256": "d9cf469c2c5724a7272627aa0abf5ce0e1dcc7e5f02e90cd0f39162a1a6123d8",
+  "mime": "image/png",
+  "dup": false
+ },
+ {
+  "file": "assets/lab-2.jpg",
+  "bytes": 51784,
+  "sha256": "e7d5fe00f80ab8d8917934383e3c06cf065d39c186f478a72b62a7c7046fe52d",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/lab-3.jpg",
+  "bytes": 38409,
+  "sha256": "184fbb4184c8b73af79c693973f0dde93a8bffdf36760c269ff216ae0e6a5713",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/lab-4.jpg",
+  "bytes": 98272,
+  "sha256": "27986f87b76d79028df53645e3519cf1fb07dc5e255b1dbf5590c64cb203af54",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/diana.jpg",
+  "bytes": 46987,
+  "sha256": "07d615a139206c5c00edb3253c5fc543dbb98306fa2e9d94c63f2e6c62eefc4a",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-6.png",
+  "bytes": 387886,
+  "sha256": "e7e095ed28df75d4e06a18969c6d55b539516124a14e5dc36f094fb63eb1f4e1",
+  "mime": "image/png",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-7.png",
+  "bytes": 363520,
+  "sha256": "dd89ac4a16dc8b763904602fb5176b89b5f49453e62bf196aed762099ee0715b",
+  "mime": "image/png",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-8.png",
+  "bytes": 475026,
+  "sha256": "95a4e3138e956c34e928c9f8e8e221ad350d6987f0a2377ea20393c606d87750",
+  "mime": "image/png",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-9.png",
+  "bytes": 563868,
+  "sha256": "1d799ec41b6adc170ef781e09e1f433baab56f997fe10bc0e6130bf928936b43",
+  "mime": "image/png",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-10.jpg",
+  "bytes": 39151,
+  "sha256": "f7b2181b8348adfc6eabcdb061fe4df040ea1eccc896d9a178ca0d0cd21228f9",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-11.png",
+  "bytes": 517029,
+  "sha256": "b5b36851c61a31993b8e7311816b156ed7b19f454c2232399d9c0449aa2a4496",
+  "mime": "image/png",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-12.jpg",
+  "bytes": 42667,
+  "sha256": "e8953d646c18fa278300b7fb5639af322c549a57e7f11c33e531cc7e9020ae11",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-13.png",
+  "bytes": 516836,
+  "sha256": "fee0bf488f7e669b00f7bf414e35f2c49f0885a456d211ae6d85851b0d398172",
+  "mime": "image/png",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-14.jpg",
+  "bytes": 48237,
+  "sha256": "978e5c4adfa042ec0443e6d6b5c002b6b7be49025e2442a4208cfc0c49e6ce4f",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/lab-2.jpg",
+  "dup": true
+ },
+ {
+  "file": "assets/asset-16.png",
+  "bytes": 544379,
+  "sha256": "ea53a3015a6acf22307dbc414d1dd691d836dd411df1079a5e0f3e6469eb6604",
+  "mime": "image/png",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-17.jpg",
+  "bytes": 39790,
+  "sha256": "5398371a927b6ffd24bbcf0091df31fc730e3e42f50c25f524708fbbb21837d7",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-18.jpg",
+  "bytes": 42412,
+  "sha256": "69e064974628ce60d72c3eccfebb8db9a04d8b074f1ec7dd21300f05be97c2a2",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-19.png",
+  "bytes": 685939,
+  "sha256": "a448d641ab3c352e428b752d845e61aa19a26ddf81bb46cf6fd4ce34da8109b4",
+  "mime": "image/png",
+  "dup": false
+ },
+ {
+  "file": "assets/lab-4.jpg",
+  "dup": true
+ },
+ {
+  "file": "assets/lab-3.jpg",
+  "dup": true
+ },
+ {
+  "file": "assets/asset-22.jpg",
+  "bytes": 46656,
+  "sha256": "403a388ba90cf4d9b2cf9f86d7d33ccab0ea6cbe9d8d3f9e1ba59b07b3c8c114",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-23.jpg",
+  "bytes": 43464,
+  "sha256": "dea815f2fc44f6b326ca02b41fbb35d48d1fab125342086f21359fa985b5baf3",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-24.jpg",
+  "bytes": 47719,
+  "sha256": "bbbb90c874f4b8aff4b1bc4df53435014019d8f407c919c7ccda711bd47fad5a",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-25.jpg",
+  "bytes": 44447,
+  "sha256": "4587d929e3784af1455054e61153fc9fe1c3a3f215d995fb3426769c36b1e81d",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-26.png",
+  "bytes": 655995,
+  "sha256": "7075904e394987e5e2ef99f9d064a8d3c8233c19e68d99ed35fee465b6fdf339",
+  "mime": "image/png",
+  "dup": false
+ },
+ {
+  "file": "assets/medalla-nivel-rookie.jpg",
+  "bytes": 45226,
+  "sha256": "2c58a5a7d7ddb923e79e227dc695be2998457973249f1fb9b1655db22fa863e5",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/medalla-nivel-pro-45-dias.jpg",
+  "bytes": 52080,
+  "sha256": "8b8ab79c8325070f374ef714c4ed2bd12f1324e2268c05c2303a0bc32562b4aa",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/medalla-nivel-elite-90-dias.jpg",
+  "bytes": 40512,
+  "sha256": "29cc7251f6b9f2090b3b652559b4c74af1ebdab37df2e1d165e7998cf205993a",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/medalla-nivel-legend-180-dias.jpg",
+  "bytes": 53985,
+  "sha256": "7b9e6f2c7afc7e7f7e2643c4ccdb950ed8f0a7b3e4e1faebe8c9cda649b7ed5b",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-31.jpg",
+  "bytes": 38514,
+  "sha256": "2c4eecd7c154add04e9ee3520604afa362af988eb38675e0209f009c3f708515",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-32.jpg",
+  "bytes": 41495,
+  "sha256": "d1a68f5ad3fd5a76fc643a196f505540f53b1fe468f05b6137cb561f3275d9dc",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-33.jpg",
+  "bytes": 44012,
+  "sha256": "0ab3ff968dd253841125e370ba3e687d52e0c865d66a43996d3c452c26aa278e",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-34.jpg",
+  "bytes": 42473,
+  "sha256": "d7c7f0b2971770ebf3d88d5bac741f12d7ee7463bc32ebc5298dddece21aed8b",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/asset-6.png",
+  "dup": true
+ },
+ {
+  "file": "assets/asset-17.jpg",
+  "dup": true
+ },
+ {
+  "file": "assets/asset-10.jpg",
+  "dup": true
+ },
+ {
+  "file": "assets/mascota-huevo.jpg",
+  "bytes": 93021,
+  "sha256": "0f05e365c512ecd6291924185eae6e8d42c2a0f01d357c51630d976be0465d34",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/mascota-larva.jpg",
+  "bytes": 74441,
+  "sha256": "273b7f108fc96e8be7833fb053ebc3f31e833d4a1e641cc54d08443cb44f1d04",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/mascota-bebe.jpg",
+  "bytes": 87719,
+  "sha256": "8bb9ac056aa202c141e912658a8cf7899fc65581f8c9c3bfaedb40998949e8e8",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/mascota-adulta.jpg",
+  "bytes": 78587,
+  "sha256": "fffbde0dacfeffd7e22d24113427c456efaf50b99d25fc6d5d8c779e74b351c2",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/mascota-reina.jpg",
+  "bytes": 167765,
+  "sha256": "1e39e1e538768f66dad03093c7027209487accbd33ddf9e89c8ad7aea4608afb",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/mascota-legend.jpg",
+  "bytes": 220760,
+  "sha256": "7079889fce10c8e8d6e877c259645664fec88f21437781ed0db61fa18b791a09",
+  "mime": "image/jpeg",
+  "dup": false
+ },
+ {
+  "file": "assets/video-legend.mp4",
+  "bytes": 721029,
+  "sha256": "93c741f6e8bbd1742d4135d8066e6168aa009ec222ea552e1d4137d3858d33fa",
+  "mime": "video/mp4",
+  "dup": false
+ },
+ {
+  "file": "assets/video-kiss.mp4",
+  "bytes": 360120,
+  "sha256": "9b7b3e9f588892670a66e17887b989128f1f21ac089b2953dbbff6e16bbc7cb9",
+  "mime": "video/mp4",
+  "dup": false
+ }
+]
