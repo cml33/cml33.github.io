@@ -6270,6 +6270,7 @@ function dcCalcs(){
     cobro:nt.getDate()+'/'+(nt.getMonth()+1),grrr:hd.grrr||0};
 }
 
+try{ window.__deicyAsk = function(q){ return dcAnswer(q); }; }catch(e){} /* Deicy Compañera (extensión) pregunta acá */
 function dcAnswer(q){
   try { var __ext = window.__deicyBrainExtra && window.__deicyBrainExtra(q); if (__ext) return __ext; } catch(e) {}
   var c=dcCalcs(); var L=c.L;
