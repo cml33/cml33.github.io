@@ -2267,6 +2267,12 @@ input[type="color"] { opacity: 0; position: absolute; width: 0; height: 0; }
       <div id="hoy-prediction" style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Cargando recomendación...</div>
     </div>
 
+    <!-- 🐳 Radar de ballenas (clientes que se enfrían) -->
+    <div class="collapse-box collapsed" id="collapse-radar-ballenas" style="background:var(--surface-1);border:0.5px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:10px;">
+      <div class="collapse-head" style="font-size:10px;color:var(--text-tertiary);letter-spacing:0.08em;text-transform:uppercase;"><span id="radar-title">🐳 Radar de ballenas</span> <span id="radar-count" style="color:var(--accent);text-transform:none;font-size:11px;margin-left:6px;"></span></div>
+      <div class="collapse-body"><div id="radar-list"></div></div>
+    </div>
+
     <!-- Recordatorios del día (con alarma) -->
     <div class="collapse-box collapsed" id="collapse-recordatorios" style="background:var(--surface-1);border:0.5px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:10px;">
       <div class="collapse-head" style="font-size:10px;color:var(--text-tertiary);letter-spacing:0.08em;text-transform:uppercase;"><span data-i18n="hoy_recordatorios">🔔 Recordatorios de hoy</span> <span id="rec-count" style="color:var(--accent);text-transform:none;font-size:11px;margin-left:6px;"></span></div>
@@ -3122,7 +3128,7 @@ input[type="color"] { opacity: 0; position: absolute; width: 0; height: 0; }
   </div>
 
   <!-- TAB STREAMING -->
-  <div class="tab-content" id="tab-streaming"><div id="streaming-root"></div></div>
+  <div class="tab-content" id="tab-streaming"><div id="tz-clock"></div><div id="streaming-root"></div></div>
 
   <!-- TAB FACTURACIÓN -->
   <div class="tab-content" id="tab-facturacion">
@@ -23906,6 +23912,179 @@ function injectBellNotifs(){ try{ var mc=document.getElementById('fatigue-modal-
 function hookBell(){ try{ var t=document.getElementById('fatigue-toggle'); if(t && !t.__notifHook){ t.__notifHook=1; t.addEventListener('click', function(){ setTimeout(injectBellNotifs,120); setTimeout(injectBellNotifs,330); }); } var cl=document.getElementById('fatigue-close'), ok=document.getElementById('fatigue-ok'); [cl,ok].forEach(function(b){ if(b&&!b.__notifHook){ b.__notifHook=1; b.addEventListener('click',function(){ setTimeout(updateBellBadge,120); }); } }); }catch(e){} }
 try{ setTimeout(function(){hookBell();updateBellBadge();},700); setTimeout(function(){hookBell();updateBellBadge();},2200); document.addEventListener('DOMContentLoaded',function(){ setTimeout(function(){hookBell();updateBellBadge();},700); }); }catch(e){}
 
+})();
+
+</script>
+<script>
+/* 🐳 RADAR DE BALLENAS + 🌎 RELOJ DE HUSOS (v gh-4, 29/09/2026)
+   - Radar: tarjeta en HOY con clientes que se están enfriando según SU frecuencia habitual.
+   - Reloj: arriba de Streaming, hora en NY / California / España + aviso de cambio de hora. */
+(function(){
+  'use strict';
+  var L=function(es,en){ return window.L?window.L(es,en):es; };
+  var OK_KEY='deicy_radar_ok';
+  function getData(){ try{ return (window.__deicyApp&&window.__deicyApp.getData)?window.__deicyApp.getData():null; }catch(e){ return null; } }
+  function pad(n){ return (n<10?'0':'')+n; }
+  function dk(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  function dayNum(s){ var p=String(s).split('-'); return Date.UTC(+p[0],+p[1]-1,+p[2])/86400000; }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function money(v){ return '$'+Math.round(v).toLocaleString('es-AR'); }
+  function loadOk(){ try{ return JSON.parse(localStorage.getItem(OK_KEY)||'{}')||{}; }catch(e){ return {}; } }
+  function saveOk(o){ try{ localStorage.setItem(OK_KEY,JSON.stringify(o)); }catch(e){} }
+
+  /* ---------- 🐳 RADAR ---------- */
+  function calcRadar(){
+    var d=getData(); if(!d||!d.clientes) return [];
+    var today=dayNum(dk(new Date()));
+    var out=[];
+    Object.keys(d.clientes).forEach(function(k){
+      var c=d.clientes[k]; if(!c) return;
+      var nick=c.nick||k;
+      if(/^unavailable$/i.test(nick)) return;
+      var tx=c.transactions||[];
+      var days={}, spend180=0;
+      tx.forEach(function(t){
+        if(!t||!t.date) return;
+        var n=dayNum(t.date); if(today-n>180||n>today) return;
+        days[n]=1; spend180+=(+t.amount||0);
+      });
+      var ds=Object.keys(days).map(Number).sort(function(a,b){return a-b;});
+      if(ds.length<3||spend180<60) return;
+      var gaps=[]; for(var i=1;i<ds.length;i++) gaps.push(ds[i]-ds[i-1]);
+      gaps.sort(function(a,b){return a-b;});
+      var gap=Math.max(3,gaps[Math.floor(gaps.length/2)]||7);
+      var last=ds[ds.length-1];
+      var since=today-last;
+      var thr=Math.max(7,Math.round(gap*2));
+      if(since<thr||since>120) return;
+      var spanM=Math.max(1,(last-ds[0])/30);
+      var monthly=spend180/spanM;
+      if(monthly<25) return;
+      var lost=since>=Math.max(21,gap*4);
+      out.push({nick:nick,since:since,gap:gap,monthly:monthly,total:+c.totalSpent||spend180,lost:lost,last:dk(new Date(last*86400000+43200000)),notes:(c.notes||'').trim()});
+    });
+    out.sort(function(a,b){ return b.monthly-a.monthly; });
+    return out;
+  }
+
+  function renderRadar(){
+    var box=document.getElementById('radar-list'); var cnt=document.getElementById('radar-count');
+    if(!box) return;
+    var ttl=document.getElementById('radar-title'); if(ttl) ttl.textContent=L('🐳 Radar de ballenas','🐳 Whale radar');
+    var ok=loadOk(), changed=false;
+    var all=calcRadar();
+    var list=all.filter(function(r){
+      var m=ok[r.nick]; if(!m) return true;
+      if(r.last>m.last){ delete ok[r.nick]; changed=true; return true; } /* volvió y se volvió a enfriar */
+      var age=dayNum(dk(new Date()))-dayNum(m.on);
+      if(age>7){ delete ok[r.nick]; changed=true; return true; } /* a la semana te lo recuerda de nuevo */
+      return false;
+    });
+    if(changed) saveOk(ok);
+    var risk=list.reduce(function(s,r){return s+r.monthly;},0);
+    if(cnt) cnt.textContent=list.length?(list.length+' · ~'+money(risk)+L('/mes en riesgo','/mo at risk')):L('todo en orden ✨','all good ✨');
+    if(!list.length){
+      box.innerHTML='<div style="font-size:12px;color:var(--text-tertiary);padding:10px 0;line-height:1.5;">'+L('Ningún cliente bueno se está enfriando. ¡Tus regulares están al día! 🐝','No good client is cooling off. Your regulars are on track! 🐝')+'</div>';
+      return;
+    }
+    var html='<div style="font-size:11px;color:var(--text-tertiary);margin:10px 0 8px;line-height:1.5;">'+L('Clientes que gastaban bien y hace más del doble de lo normal que no vienen. Escribiles o mandales algo lindo 💌. Tocá ✓ cuando ya lo hiciste (se oculta 7 días).','Good spenders who have been away twice as long as usual. Message them 💌. Tap ✓ when done (hidden for 7 days).')+'</div>';
+    list.slice(0,12).forEach(function(r){
+      html+='<div style="display:flex;gap:10px;align-items:flex-start;padding:9px 10px;margin-bottom:6px;background:var(--surface-2);border:0.5px solid '+(r.lost?'var(--danger,#e57373)':'var(--border)')+';border-radius:var(--radius-sm);">'
+        +'<div style="font-size:18px;line-height:1.2;">'+(r.lost?'🔴':'🟡')+'</div>'
+        +'<div style="flex:1;min-width:0;">'
+          +'<div style="font-size:13px;font-weight:500;color:var(--text-primary);word-break:break-word;">'+esc(r.nick)+' <span style="font-size:11px;font-weight:400;color:var(--text-tertiary);">'+(r.lost?L('se está yendo','slipping away'):L('se está enfriando','cooling off'))+'</span></div>'
+          +'<div style="font-size:11.5px;color:var(--text-secondary);line-height:1.5;margin-top:2px;">'
+            +L('Hace ','')+'<b>'+r.since+'</b>'+L(' días sin venir',' days away')+' · '+L('suele venir cada ','usually every ')+r.gap+L(' días',' days')
+            +'<br>~<b style="color:var(--accent)">'+money(r.monthly)+L('/mes','/mo')+'</b> · '+L('total ','total ')+money(r.total)
+          +'</div>'
+          +(r.notes?'<div style="font-size:11px;color:var(--text-tertiary);margin-top:3px;">📝 '+esc(r.notes.slice(0,90))+'</div>':'')
+        +'</div>'
+        +'<button type="button" data-radar-ok="'+esc(r.nick)+'" data-radar-last="'+r.last+'" title="'+L('Ya le escribí','Done')+'" style="flex-shrink:0;background:var(--accent-bg);border:0.5px solid var(--accent);color:var(--accent);border-radius:var(--radius-sm);padding:4px 9px;font-size:13px;cursor:pointer;">✓</button>'
+      +'</div>';
+    });
+    if(list.length>12) html+='<div style="font-size:11px;color:var(--text-tertiary);">+'+(list.length-12)+L(' más',' more')+'</div>';
+    box.innerHTML=html;
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target&&e.target.closest?e.target.closest('[data-radar-ok]'):null; if(!b) return;
+    var o=loadOk(); o[b.getAttribute('data-radar-ok')]={on:dk(new Date()),last:b.getAttribute('data-radar-last')}; saveOk(o);
+    renderRadar();
+  });
+  window.__deicyRadar={calc:calcRadar,render:renderRadar};
+
+  /* ---------- 🌎 RELOJ DE HUSOS ---------- */
+  var ZONES=[
+    {tz:'America/New_York',flag:'🗽',es:'Nueva York',en:'New York'},
+    {tz:'America/Los_Angeles',flag:'🌴',es:'California',en:'California'},
+    {tz:'Europe/Madrid',flag:'💃',es:'España',en:'Spain'}
+  ];
+  var MY_TZ='America/Argentina/Buenos_Aires';
+  function partsIn(tz,date){
+    var f=new Intl.DateTimeFormat('en-US',{timeZone:tz,hour12:false,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+    var o={}; f.formatToParts(date).forEach(function(p){o[p.type]=p.value;});
+    var h=+o.hour; if(h===24) h=0;
+    return {h:h,m:+o.minute,y:+o.year,mo:+o.month,d:+o.day};
+  }
+  function offMin(tz,date){ var p=partsIn(tz,date); return Math.round((Date.UTC(p.y,p.mo-1,p.d,p.h,p.m)-Math.floor(date.getTime()/60000)*60000)/60000); }
+  function mood(h){
+    if(h>=19&&h<23) return {t:L('🔥 horario fuerte','🔥 prime time'),hot:2};
+    if(h>=23||h<2)  return {t:L('🌙 noche, buenos privados','🌙 late night, good privates'),hot:2};
+    if(h>=17&&h<19) return {t:L('🌆 saliendo del laburo','🌆 off work'),hot:1};
+    if(h>=12&&h<14) return {t:L('☕ almuerzo','☕ lunch break'),hot:1};
+    if(h>=2&&h<8)   return {t:L('😴 durmiendo','😴 asleep'),hot:0};
+    return {t:L('💼 trabajando','💼 at work'),hot:0};
+  }
+  function dstNotice(now){
+    var msgs=[];
+    ZONES.forEach(function(z){
+      var d0=offMin(z.tz,now)-offMin(MY_TZ,now);
+      for(var k=1;k<=10;k++){
+        var fut=new Date(now.getTime()+k*86400000);
+        var d1=offMin(z.tz,fut)-offMin(MY_TZ,fut);
+        if(d1!==d0){
+          var dia=partsIn(MY_TZ,fut); var diff=Math.abs(d1)/60;
+          var cuando=k<=1?L('mañana','tomorrow'):L('en '+k+' días ('+dia.d+'/'+dia.mo+')','in '+k+' days ('+dia.mo+'/'+dia.d+')');
+          var rel=d1<0?L(' atrás tuyo',' behind you'):L(' adelante tuyo',' ahead of you');
+          var tip=(d1<d0)?L(' Su horario fuerte te va a caer 1 hora más tarde: conviene correr ese bloque.',' Their prime time will hit you 1 hour later: shift that block.'):L(' Su horario fuerte te va a caer 1 hora antes.',' Their prime time will hit you 1 hour earlier.');
+          msgs.push('⚠️ '+z.flag+' '+L(z.es,z.en)+': '+L('cambia la hora ','clocks change ')+cuando+L('. Desde ahí queda a ',' — then it will be ')+diff+L(' h',' h')+rel+'.'+tip);
+          break;
+        }
+      }
+    });
+    return msgs;
+  }
+  function renderClock(){
+    var el=document.getElementById('tz-clock'); if(!el) return;
+    var now=new Date(), hot=0, cells='';
+    ZONES.forEach(function(z){
+      var p=partsIn(z.tz,now), m=mood(p.h); hot+=m.hot;
+      var diff=(offMin(z.tz,now)-offMin(MY_TZ,now))/60; var ds=(diff>0?'+':'')+diff+'h';
+      cells+='<div style="background:var(--surface-2);border:0.5px solid '+(m.hot===2?'var(--accent)':'var(--border)')+';border-radius:var(--radius-sm);padding:8px 6px;text-align:center;min-width:0;">'
+        +'<div style="font-size:11px;color:var(--text-tertiary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+z.flag+' '+L(z.es,z.en)+' <span style="opacity:.7">'+ds+'</span></div>'
+        +'<div style="font-family:var(--font-mono,monospace);font-size:20px;font-weight:500;color:'+(m.hot===2?'var(--accent)':'var(--text-primary)')+';margin:2px 0;">'+pad(p.h)+':'+pad(p.m)+'</div>'
+        +'<div style="font-size:10.5px;color:var(--text-secondary);line-height:1.3;">'+m.t+'</div></div>';
+    });
+    var head=hot>=4?L('🔥 Momento ideal para estar en vivo','🔥 Perfect time to be live'):hot>=2?L('✨ Buen momento','✨ Good time'):L('😴 Hora tranqui afuera','😴 Quiet time abroad');
+    var notes=dstNotice(now).map(function(t){return '<div style="font-size:11px;color:var(--text-secondary);background:var(--warn-bg,rgba(255,200,0,.08));border:0.5px solid var(--warn,#e0b040);border-radius:var(--radius-sm);padding:6px 8px;margin-top:8px;line-height:1.45;">'+t+'</div>';}).join('');
+    el.innerHTML='<div style="background:var(--surface-1);border:0.5px solid var(--border);border-radius:var(--radius-md);padding:12px 14px;margin-bottom:12px;">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><span style="font-size:10px;color:var(--text-tertiary);letter-spacing:.08em;text-transform:uppercase;">🌎 '+L('Hora de tus clientes','Your clients’ time')+'</span><span style="font-size:12px;color:var(--text-secondary);">'+head+'</span></div>'
+      +'<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;">'+cells+'</div>'+notes+'</div>';
+  }
+  window.__deicyClock={render:renderClock,dst:dstNotice};
+
+  var __lang=window.__deicyIdioma;
+  function tick(){ try{renderClock();}catch(e){console.warn('[reloj]',e);} if(window.__deicyIdioma!==__lang){ __lang=window.__deicyIdioma; try{renderRadar();}catch(e){} } }
+  function start(){
+    tick(); setInterval(tick,30000);
+    try{renderRadar();}catch(e){console.warn('[radar]',e);}
+    setInterval(function(){ try{renderRadar();}catch(e){} },120000);
+    document.addEventListener('click',function(e){
+      var t=e.target&&e.target.closest?e.target.closest('[data-tab="hoy"],#collapse-radar-ballenas .collapse-head'):null;
+      if(t) setTimeout(function(){ try{renderRadar();}catch(er){} },60);
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ setTimeout(start,1200); });
+  else setTimeout(start,1200);
 })();
 
 </script>
