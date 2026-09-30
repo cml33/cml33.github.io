@@ -2267,6 +2267,27 @@ input[type="color"] { opacity: 0; position: absolute; width: 0; height: 0; }
       <div id="hoy-prediction" style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Cargando recomendación...</div>
     </div>
 
+    <!-- 🎯 Plan 6K (métricas del mes) -->
+    <style id="plan6k-css">
+    #plan6k-card{background:var(--surface-1);border:0.5px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:10px;}
+    #plan6k-card .p6k-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-bottom:10px;}
+    #plan6k-card .p6k-title{font-size:10px;color:var(--text-tertiary);letter-spacing:0.08em;text-transform:uppercase;}
+    #plan6k-card .p6k-concl{font-size:13px;color:var(--text-primary);font-weight:500;}
+    #plan6k-card .p6k-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+    #plan6k-card .p6k-cell{background:var(--surface-2);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:9px 10px;min-width:0;}
+    #plan6k-card .p6k-lbl{font-size:11px;color:var(--text-tertiary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    #plan6k-card .p6k-val{font-family:var(--font-mono);font-size:15px;color:var(--text-primary);margin:3px 0 5px;word-break:break-word;line-height:1.25;}
+    #plan6k-card .p6k-val small{font-size:11px;color:var(--text-tertiary);}
+    #plan6k-card .p6k-edit{border-bottom:1px dashed var(--text-tertiary);cursor:pointer;}
+    #plan6k-card .p6k-bar{height:6px;border-radius:4px;background:var(--surface-1);overflow:hidden;position:relative;}
+    #plan6k-card .p6k-bar > i{display:block;height:100%;border-radius:4px;background:var(--accent);}
+    #plan6k-card .p6k-bar > b{position:absolute;top:-1px;bottom:-1px;width:2px;background:var(--text-tertiary);opacity:.7;}
+    #plan6k-card .p6k-cell.warn .p6k-bar > i{background:var(--warn,#e0b040);}
+    #plan6k-card .p6k-sub{font-size:10.5px;color:var(--text-secondary);line-height:1.4;margin-top:5px;word-break:break-word;}
+    #plan6k-card .p6k-extra{margin-top:8px;font-size:11.5px;color:var(--text-secondary);line-height:1.5;background:var(--surface-2);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:7px 10px;}
+    </style>
+    <div id="plan6k-card"><div class="p6k-head"><span class="p6k-title">🎯 Plan 6K</span></div></div>
+
     <!-- 🐳 Radar de ballenas (clientes que se enfrían) -->
     <div class="collapse-box collapsed" id="collapse-radar-ballenas" style="background:var(--surface-1);border:0.5px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:10px;">
       <div class="collapse-head" style="font-size:10px;color:var(--text-tertiary);letter-spacing:0.08em;text-transform:uppercase;"><span id="radar-title">🐳 Radar de ballenas</span> <span id="radar-count" style="color:var(--accent);text-transform:none;font-size:11px;margin-left:6px;"></span></div>
@@ -4813,6 +4834,8 @@ try{window.getMonthlyTotals=getMonthlyTotals;}catch(e){} function getMonthlyTota
   data.bonuses.forEach(b => { const d=new Date(b.date+'T12:00:00'); if(d.getMonth()===viewMonth&&d.getFullYear()===viewYear) bonusTotal+=b.amount||0; });
   return { mH, mE, paids, days, bonusTotal, b1h, b1e, b1wins, b2h, b2e, b2wins, bch, bce, bcCount };
 }
+/* 🎯 Plan 6K: totales de CUALQUIER mes con la misma lógica que getMonthlyTotals (sin tocar el mes que mira la usuaria) */
+try{ window.__deicyMonthStats=function(y,m){ var oy=viewYear, om=viewMonth; try{ viewYear=y; viewMonth=m; var t=getMonthlyTotals(); return {mE:t.mE, bonus:t.bonusTotal, total:t.mE+t.bonusTotal, mH:t.mH, days:t.days}; } finally { viewYear=oy; viewMonth=om; } }; }catch(e){}
 
 /* ---- OUTFIT ANALYSIS ---- */
 function getOutfitStats() {
@@ -13455,12 +13478,13 @@ function renderHoyPrivados() {
       const tcolor = TYPE_COLOR[p.type||'pvt'];
       const tlabel = TYPE_LABEL[p.type||'pvt'];
       const showMins = (p.type==='tip' || p.type==='fanclub') ? '' : `<span style="color:var(--text-secondary);font-family:var(--font-mono);">${(typeof formatMinSec==='function'?formatMinSec(p.minutes||0):(p.minutes||0)+'min')}</span>`;
+      const clienteBadge = p.cliente ? `<span style="font-size:10px;color:var(--text-tertiary);background:var(--surface-1);padding:2px 6px;border-radius:8px;">👤 ${escHtml(p.cliente)}</span>` : '';
       const outfitBadge = p.outfitName ? `<span style="font-size:10px;color:var(--text-tertiary);background:var(--surface-1);padding:2px 6px;border-radius:8px;">👗 ${p.outfitName}</span>` : '';
       const earnTxt = `<span style="color:var(--accent);font-family:var(--font-mono);font-weight:500;">$${typeof p.earned==='number'?(Math.round(p.earned*100)/100):(p.earned||0)}</span>`;
       const middle = `<span style="color:${tcolor};font-weight:600;font-size:11px;white-space:nowrap;">${tlabel}</span>
         <span style="color:${bcolor};font-weight:600;font-family:var(--font-mono);font-size:11px;">${p.block==='bc'?'☎️':(p.block||'b1').toUpperCase()}</span>
         <span style="flex:1;color:var(--text-primary);min-width:80px;">${p.type==='fanclub' ? `${(p.uniqueSubs||p.subCount||0)} suscriptor${(p.uniqueSubs||p.subCount||0)!==1?'es':''} · ${p.subCount||0} tx` : escHtml(p.show||'—')}</span>
-        ${outfitBadge}
+        ${clienteBadge}${outfitBadge}
         ${showMins}
         ${earnTxt}`;
       if (selMode) {
@@ -13923,6 +13947,83 @@ document.getElementById('pvt-add-btn').addEventListener('click', () => {
 })();
 
 window.renderHoy = renderHoy;
+
+/* ===== 🔌 API PARA LA EXTENSIÓN COMPAÑERA (privados) =====
+   window.__deicyPvtOptions() y window.__deicyAddPrivado({...}). Guardan EXACTO como el botón "+ Agregar privado" de HOY. */
+(function(){
+  var TYPES=[{id:'pvt',label:'🔒 PVT'},{id:'xclsv',label:'⭐ Exclusivo'},{id:'gold',label:'🥇 Gold Show'},{id:'call',label:'☎️ Llamada'},{id:'fanclub',label:'🌟 Fan Club'},{id:'tip',label:'💝 Tip/Otros'}];
+  function realKey(){ return dkey(new Date()); }
+  window.__deicyPvtOptions=function(){
+    try{
+      var k=realKey(), hd=(data.hoy&&data.hoy[k])||{}, seen={}, outfits=[];
+      function push(id,name){ if(id==null||id==='') return; id=String(id); if(seen[id]) return; seen[id]=1; outfits.push({id:id,name:String(name||id)}); }
+      var wd=data.wardrobe||[], mq=data.maniquis||[];
+      function wname(id){ var w=wd.find(function(x){return String(x.id)===String(id);}); return w?w.name:null; }
+      function mname(id){ var m=mq.find(function(x){return String(x.id)===String(id);}); return m?('🎀 '+m.name):null; }
+      (hd.outfits||[]).forEach(function(o){ if(!o) return; if(o.maniquiId) push(o.maniquiId,mname(o.maniquiId)||o.name); else if(o.wardrobeId) push(o.wardrobeId,wname(o.wardrobeId)||o.name); else if(o.type) push(o.type,o.name); });
+      var ent=(data.entries&&data.entries[k])||{};
+      (Array.isArray(ent.outfits)?ent.outfits:[]).forEach(function(o){ if(!o) return; if(o.maniquiId) push(o.maniquiId,mname(o.maniquiId)||o.name); else if(o.wardrobeId) push(o.wardrobeId,wname(o.wardrobeId)||o.name); else if(o.type) push(o.type,o.name); });
+      wd.forEach(function(w){ push(w.id,w.name); });
+      mq.forEach(function(m){ push(m.id,'🎀 '+m.name); });
+      /* shows: los de hoy primero, luego el datalist de la app (lista base + biblioteca) */
+      var shows=[], sseen={};
+      function ps(n){ n=String(n==null?'':n).trim(); if(!n||sseen[n]) return; sseen[n]=1; shows.push(n); }
+      (hd.shows||[]).forEach(ps);
+      try{ populateShowDatalist(); var dl=document.getElementById('hoy-show-datalist'); if(dl) Array.prototype.forEach.call(dl.options,function(o){ ps(o.value); }); }catch(e){}
+      var rates={}; var sp=config.sessionPrices||{}; Object.keys(sp).forEach(function(t){ rates[t]=+sp[t]||0; });
+      return {ok:true, outfits:outfits, shows:shows, types:TYPES.map(function(t){return {id:t.id,label:t.label};}), rates:rates, today:k};
+    }catch(e){ return {ok:false,error:String(e&&e.message||e)}; }
+  };
+  window.__deicyAddPrivado=function(p){
+    try{
+      p=p||{};
+      var user=String(p.user==null?'':p.user).trim();
+      var type=String(p.type||'pvt');
+      if(!TYPES.some(function(t){return t.id===type;})) return {ok:false,error:'tipo inválido: '+type};
+      var minutes=Number(p.minutes), earned=Number(p.earned);
+      if(!isFinite(minutes)||minutes<0) return {ok:false,error:'minutes inválido'};
+      if(!isFinite(earned)||earned<0) return {ok:false,error:'earned inválido'};
+      minutes=Math.round(minutes*1000)/1000; earned=Math.round(earned*100)/100;
+      var now=Date.now();
+      var startedAt=Number(p.startedAt); if(!isFinite(startedAt)||startedAt<=0) startedAt=now-Math.round(minutes*60000);
+      var endMs=Math.min(now,startedAt+Math.round(minutes*60000));
+      var endD=new Date(endMs), k=dkey(endD);
+      var id=(user||'anon')+'|'+startedAt;
+      /* idempotencia: mismo cliente + startedAt (miro el día y el anterior por si cruza medianoche) */
+      var prevK=dkey(new Date(endMs-86400000)), dup=null;
+      [k,prevK].forEach(function(kk){ var hh=data.hoy&&data.hoy[kk]; if(hh&&hh.privados) hh.privados.forEach(function(x){ if(x&&x.startedAt===startedAt&&(x.cliente||'')===user) dup=x; }); });
+      if(dup) return {ok:true,id:id,duplicate:true};
+      var show=String(p.show||'').trim();
+      if(!data.hoy) data.hoy={};
+      if(!data.hoy[k]) data.hoy[k]={ outfits:[], shows:[], privados:[] };
+      var hd=data.hoy[k]; hd.privados=hd.privados||[];
+      /* bloque: igual que el botón (Auto según horario; llamada => bc) */
+      var block=(type==='call')?'bc':(detectBlock(endD)||'offline');
+      /* outfit: mismo formato que el <select> (value=id, outfitName=texto de la opción) */
+      var outfit='', outfitName='';
+      if(p.outfitId!=null&&String(p.outfitId)!==''){
+        outfit=String(p.outfitId);
+        var w=(data.wardrobe||[]).find(function(x){return String(x.id)===outfit;});
+        var m=(data.maniquis||[]).find(function(x){return String(x.id)===outfit;});
+        outfitName=w?w.name:(m?('🎀 '+m.name):String(p.outfitName||''));
+      } else if(p.outfitName){
+        var wn=(data.wardrobe||[]).find(function(x){return x.name===String(p.outfitName);});
+        if(wn){ outfit=String(wn.id); outfitName=wn.name; } else { outfitName=String(p.outfitName); }
+      }
+      var np={ type:type, show:show, minutes:minutes, earned:earned, block:block, outfit:outfit, outfitName:outfitName };
+      if(type==='fanclub'){ np.subCount=1; np.uniqueSubs=1; np.show=''; }
+      if(user) np.cliente=user;
+      np.startedAt=startedAt;
+      hd.privados.push(np);
+      if(typeof syncHoyOutfitsToEntry==='function') syncHoyOutfitsToEntry(k);
+      saveData();
+      if(k===todayKey()){ try{ renderHoyPrivados(); renderHoyPrediction(); }catch(e){} }
+      try{ if(typeof renderWeek==='function') renderWeek(); if(typeof renderMonthly==='function') renderMonthly(); if(typeof renderSummary==='function') renderSummary(); if(typeof renderBlockAnalysis==='function') renderBlockAnalysis(); }catch(e){}
+      try{ if(window.__deicyPlan6k) window.__deicyPlan6k.render(); }catch(e){}
+      return {ok:true,id:id};
+    }catch(e){ return {ok:false,error:String(e&&e.message||e)}; }
+  };
+})();
 
 
 /* ===== REGALOS DEL DÍA ===== */
@@ -23931,6 +24032,28 @@ try{ setTimeout(function(){hookBell();updateBellBadge();},700); setTimeout(funct
   function money(v){ return '$'+Math.round(v).toLocaleString('es-AR'); }
   function loadOk(){ try{ return JSON.parse(localStorage.getItem(OK_KEY)||'{}')||{}; }catch(e){ return {}; } }
   function saveOk(o){ try{ localStorage.setItem(OK_KEY,JSON.stringify(o)); }catch(e){} }
+  /* 🎯 Plan 6K: antes de borrar una marca ✓ porque el cliente volvió, se guarda el registro en deicy_radar_recuperadas */
+  var REC_KEY='deicy_radar_recuperadas';
+  function loadRec(){ try{ var a=JSON.parse(localStorage.getItem(REC_KEY)||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
+  function saveRec(a){ try{ localStorage.setItem(REC_KEY,JSON.stringify(a.slice(-300))); }catch(e){} }
+  function backDate(nick,last){
+    var d=getData(); if(!d||!d.clientes) return null;
+    var c=d.clientes[nick]; if(!c){ var ks=Object.keys(d.clientes); for(var i=0;i<ks.length;i++){ if((d.clientes[ks[i]]||{}).nick===nick){ c=d.clientes[ks[i]]; break; } } }
+    if(!c) return null;
+    var best=null; (c.transactions||[]).forEach(function(t){ if(t&&t.date&&t.date>last&&(!best||t.date<best)) best=t.date; });
+    return best;
+  }
+  function recordBack(nick,m,back){
+    var rec=loadRec();
+    if(!rec.some(function(x){return x&&x.nick===nick&&x.on===m.on;})){ rec.push({nick:nick,on:m.on,back:back||dk(new Date())}); saveRec(rec); }
+  }
+  /* revisa las marcas ✓: si el cliente ya compró después de su última compra registrada, la marca se borra y queda registrada la recuperación */
+  function sweepOk(){
+    var ok=loadOk(), ch=false;
+    Object.keys(ok).forEach(function(n){ var m=ok[n]; if(!m||!m.last) return; var b=backDate(n,m.last); if(b){ recordBack(n,m,b); delete ok[n]; ch=true; } });
+    if(ch) saveOk(ok);
+    return ch;
+  }
 
   /* ---------- 🐳 RADAR ---------- */
   function calcRadar(){
@@ -23971,11 +24094,12 @@ try{ setTimeout(function(){hookBell();updateBellBadge();},700); setTimeout(funct
     var box=document.getElementById('radar-list'); var cnt=document.getElementById('radar-count');
     if(!box) return;
     var ttl=document.getElementById('radar-title'); if(ttl) ttl.textContent=L('🐳 Radar de ballenas','🐳 Whale radar');
+    sweepOk();
     var ok=loadOk(), changed=false;
     var all=calcRadar();
     var list=all.filter(function(r){
       var m=ok[r.nick]; if(!m) return true;
-      if(r.last>m.last){ delete ok[r.nick]; changed=true; return true; } /* volvió y se volvió a enfriar */
+      if(r.last>m.last){ recordBack(r.nick,m,backDate(r.nick,m.last)); delete ok[r.nick]; changed=true; return true; } /* volvió y se volvió a enfriar */
       var age=dayNum(dk(new Date()))-dayNum(m.on);
       if(age>7){ delete ok[r.nick]; changed=true; return true; } /* a la semana te lo recuerda de nuevo */
       return false;
@@ -24010,7 +24134,7 @@ try{ setTimeout(function(){hookBell();updateBellBadge();},700); setTimeout(funct
     var o=loadOk(); o[b.getAttribute('data-radar-ok')]={on:dk(new Date()),last:b.getAttribute('data-radar-last')}; saveOk(o);
     renderRadar();
   });
-  window.__deicyRadar={calc:calcRadar,render:renderRadar};
+  window.__deicyRadar={calc:calcRadar,render:renderRadar,sweep:sweepOk,recuperadas:loadRec};
 
   /* ---------- 🌎 RELOJ DE HUSOS ---------- */
   var ZONES=[
@@ -24087,6 +24211,137 @@ try{ setTimeout(function(){hookBell();updateBellBadge();},700); setTimeout(funct
   else setTimeout(start,1200);
 })();
 
+
+/* 🎯 PLAN 6K — panel del mes en HOY (gh-5) */
+(function(){
+  'use strict';
+  var L=function(es,en){ return window.L?window.L(es,en):es; };
+  var K_META='deicy_plan6k_meta', K_HS='deicy_meta_horas_mes', K_AG='streamate-agenda-contenido-v1';
+  var PVT_TARGET=5;
+  function getData(){ try{ return (window.__deicyApp&&window.__deicyApp.getData)?(window.__deicyApp.getData()||{}):{}; }catch(e){ return {}; } }
+  function pad(n){ return (n<10?'0':'')+n; }
+  function dk(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  function money(v){ return '$'+Math.round(v).toLocaleString('en-US'); }
+  function num1(v){ return (Math.round(v*10)/10).toString(); }
+  function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  function metaMoney(){ var v=parseFloat(lsGet(K_META)||''); return v>0?v:6000; }
+  function metaHoras(){ var v=parseFloat(lsGet(K_HS)||''); return v>0?v:150; }
+  function ymKey(y,m){ return y+'-'+pad(m+1); }
+
+  function privStats(d,y,m){ /* promedio de minutos de privados (pvt/xclsv/call) de un mes */
+    var pref=ymKey(y,m), n=0, mins=0;
+    Object.keys(d.hoy||{}).forEach(function(k){
+      if(k.slice(0,7)!==pref) return;
+      ((d.hoy[k]||{}).privados||[]).forEach(function(p){
+        if(!p||(p.type&&p.type!=='pvt'&&p.type!=='xclsv'&&p.type!=='call')) return;
+        var mi=+p.minutes||0; if(mi<=0) return; n++; mins+=mi;
+      });
+    });
+    return {n:n,mins:mins,avg:n?mins/n:0};
+  }
+  function whales(){
+    var out={risk:0,money:0,rec:0,ok:false};
+    try{
+      if(!window.__deicyRadar) return out;
+      try{ window.__deicyRadar.sweep(); }catch(e){}
+      var all=window.__deicyRadar.calc()||[], okm={};
+      try{ okm=JSON.parse(lsGet('deicy_radar_ok')||'{}')||{}; }catch(e){}
+      var today=dk(new Date()), t0=Date.parse(today+'T12:00:00');
+      all.forEach(function(r){
+        var m=okm[r.nick];
+        if(m){ var age=Math.round((t0-Date.parse(m.on+'T12:00:00'))/86400000); if(r.last<=m.last&&age<=7) return; }
+        out.risk++; out.money+=r.monthly;
+      });
+      var pref=today.slice(0,7), seen={};
+      (window.__deicyRadar.recuperadas()||[]).forEach(function(x){ if(x&&x.back&&String(x.back).slice(0,7)===pref&&!seen[x.nick]){ seen[x.nick]=1; out.rec++; } });
+      out.ok=true;
+    }catch(e){}
+    return out;
+  }
+  function weekMonday(d){ var x=new Date(d.getFullYear(),d.getMonth(),d.getDate()); x.setDate(x.getDate()-((x.getDay()+6)%7)); return x; }
+  function content(){
+    var raw=lsGet(K_AG); if(!raw) return null;
+    var c; try{ c=JSON.parse(raw); }catch(e){ return null; } if(!c||typeof c!=='object') return null;
+    var g=c.goals||{}, gp=+g.pack>=0&&g.pack!=null?+g.pack:1, gk=+g.kwiky>=0&&g.kwiky!=null?+g.kwiky:3, days=c.days||{};
+    function wk(mon){ var p=0,k=0; for(var i=0;i<7;i++){ var dd=new Date(mon.getFullYear(),mon.getMonth(),mon.getDate()+i), v=days[dk(dd)]; if(v){ p+=+v.pack||0; k+=+v.kwiky||0; } } return {p:p,k:k,ok:(p>=gp&&k>=gk)}; }
+    var mon=weekMonday(new Date()), cur=wk(mon), streak=0;
+    var start=cur.ok?0:1;
+    for(var i=start;i<104;i++){ var w=wk(new Date(mon.getFullYear(),mon.getMonth(),mon.getDate()-7*i)); if(w.ok) streak++; else break; }
+    return {p:cur.p,k:cur.k,gp:gp,gk:gk,streak:streak};
+  }
+  function cell(icon,label,valHtml,pct,warn,sub,marker){
+    return '<div class="p6k-cell'+(warn?' warn':'')+'"><div class="p6k-lbl">'+icon+' '+label+'</div><div class="p6k-val">'+valHtml+'</div>'
+      +'<div class="p6k-bar"><i style="width:'+Math.max(0,Math.min(100,pct))+'%"></i>'+(marker!=null?'<b style="left:'+Math.max(0,Math.min(100,marker))+'%"></b>':'')+'</div>'
+      +(sub?'<div class="p6k-sub">'+sub+'</div>':'')+'</div>';
+  }
+  function render(){
+    var box=document.getElementById('plan6k-card'); if(!box) return;
+    var d=getData(), now=new Date(), y=now.getFullYear(), m=now.getMonth();
+    var dim=new Date(y,m+1,0).getDate(), dom=now.getDate(), exp=dom/dim;
+    var st=null; try{ st=window.__deicyMonthStats?window.__deicyMonthStats(y,m):null; }catch(e){}
+    if(!st) st={total:0,mH:0,mE:0,bonus:0,days:0};
+    var mm=metaMoney(), mh=metaHoras();
+    /* 1 plata */
+    var pM=st.total/mm, lagM=exp-pM, proj=null;
+    try{ var fc=window.__deicyMath&&window.__deicyMath.forecast(); if(fc&&fc.p50>0) proj=fc.p50; }catch(e){}
+    if(proj==null&&dom>0&&st.total>0) proj=st.total/dom*dim;
+    var subM=proj!=null?(L('A este ritmo cerrás en ~','At this pace you close ~')+'<b>'+money(proj)+'</b>'):L('Todavía no hay ganancias este mes','No earnings yet this month');
+    /* 2 horas */
+    var pH=st.mH/mh, lagH=exp-pH;
+    var projH=dom>0?st.mH/dom*dim:0;
+    var subH=L('Ritmo: ~','Pace: ~')+Math.round(projH)+L(' hs al cierre',' hrs at close');
+    /* 3 privados */
+    var cur=privStats(d,y,m), prevN=0, prevMin=0;
+    for(var i=1;i<=3;i++){ var pd=new Date(y,m-i,1), ps=privStats(d,pd.getFullYear(),pd.getMonth()); prevN+=ps.n; prevMin+=ps.mins; }
+    var prevAvg=prevN?prevMin/prevN:0, arrow='', dn=false;
+    if(cur.n&&prevN){ var df=cur.avg-prevAvg; arrow=Math.abs(df)<0.05?' →':(df>0?' ↑':' ↓'); dn=df<-0.05; }
+    var valP=cur.n?(num1(cur.avg)+' <small>min'+arrow+'</small>'):'<small>—</small>';
+    var subP=cur.n?(cur.n+L(' privados · 3 meses ant.: ',' privates · prev 3 mo: ')+(prevN?num1(prevAvg)+' min':'—')+' · '+L('objetivo ','goal ')+PVT_TARGET+' min'):L('Sin privados este mes','No privates this month');
+    /* 4 ballenas */
+    var w=whales(), tot=w.risk+w.rec, pW=tot?w.rec/tot*100:100;
+    var valW=w.ok?(w.risk+' <small>'+L('en riesgo','at risk')+'</small>'):'<small>—</small>';
+    var subW=w.ok?((w.risk?('~'+money(w.money)+L('/mes en riesgo','/mo at risk')+' · '):'')+'✅ '+w.rec+(w.rec===1?L(' recuperada',' recovered'):L(' recuperadas',' recovered'))):L('Radar no disponible','Radar unavailable');
+    /* conclusión */
+    var worst=Math.max(lagM,lagH), concl;
+    if(worst>0.05){ concl=(lagM>=lagH)?L('Te falta empujar plata 💰','You need to push earnings 💰'):L('Te falta empujar horas ⏰','You need to push hours ⏰'); }
+    else if(w.ok&&w.risk>0) concl=L('Vas bien 💪 · ojo con las ballenas 🐳','Doing great 💪 · watch the whales 🐳');
+    else concl=L('Vas bien 💪','Doing great 💪');
+    /* contenido */
+    var c=content(), extra;
+    if(!c) extra='<a href="planifica/" style="color:var(--accent);text-decoration:none;">'+L('Cargalos en Planifica 📅','Log them in Planifica 📅')+'</a>';
+    else extra='📦 packs <b>'+c.p+'/'+c.gp+'</b> · 📹 Kwikys <b>'+c.k+'/'+c.gk+'</b> '+L('esta semana',"this week")+(c.streak>0?' · 🔥 '+c.streak+(c.streak===1?L(' semana',' wk'):L(' semanas',' wks'))+L(' de racha',' streak'):'');
+    var monthNames=[['enero','January'],['febrero','February'],['marzo','March'],['abril','April'],['mayo','May'],['junio','June'],['julio','July'],['agosto','August'],['septiembre','September'],['octubre','October'],['noviembre','November'],['diciembre','December']];
+    var mn=L(monthNames[m][0],monthNames[m][1]);
+    box.innerHTML='<div class="p6k-head"><span class="p6k-title">🎯 Plan 6K · '+mn+' <span style="text-transform:none;letter-spacing:0;">('+L('día ','day ')+dom+'/'+dim+')</span></span><span class="p6k-concl">'+concl+'</span></div>'
+      +'<div class="p6k-grid">'
+      +cell('💰',L('Plata','Money'),money(st.total)+' / <span class="p6k-edit" data-p6k-edit="money" title="'+L('Tocá para cambiar la meta','Tap to change the goal')+'">'+money(mm)+'</span>',pM*100,lagM>0.03,subM,exp*100)
+      +cell('⏰',L('Horas','Hours'),num1(st.mH)+' / <span class="p6k-edit" data-p6k-edit="hours" title="'+L('Tocá para cambiar la meta','Tap to change the goal')+'">'+num1(mh)+'</span> <small>hs</small>',pH*100,lagH>0.03,subH,exp*100)
+      +cell('🔒',L('Privados (prom.)','Privates (avg)'),valP,cur.avg/PVT_TARGET*100,cur.n>0&&dn,subP,100)
+      +cell('🐳',L('Ballenas','Whales'),valW,pW,w.ok&&w.risk>0&&pW<50,subW,null)
+      +'</div><div class="p6k-extra">'+extra+'</div>';
+  }
+  document.addEventListener('click',function(e){
+    var t=e.target&&e.target.closest?e.target.closest('[data-p6k-edit]'):null;
+    if(t){
+      var w=t.getAttribute('data-p6k-edit'), isM=(w==='money');
+      var v=window.prompt(isM?L('Meta de plata del mes (US$)','Monthly earnings goal (US$)'):L('Meta de horas del mes','Monthly hours goal'),String(isM?metaMoney():metaHoras()));
+      if(v!=null){ var n=parseFloat(String(v).replace(',','.')); if(n>0){ lsSet(isM?K_META:K_HS,String(n)); try{ if(!isM&&typeof window.renderMonthHoursBar==='function') window.renderMonthHoursBar(); }catch(er){} } }
+      render(); return;
+    }
+    var tab=e.target&&e.target.closest?e.target.closest('[data-tab="hoy"]'):null;
+    if(tab) setTimeout(function(){ try{render();}catch(er){} },80);
+  });
+  window.__deicyPlan6k={render:render};
+  var __lang=window.__deicyIdioma;
+  function start(){
+    try{render();}catch(e){console.warn('[plan6k]',e);}
+    setInterval(function(){ try{render();}catch(e){} },120000);
+    setInterval(function(){ if(window.__deicyIdioma!==__lang){ __lang=window.__deicyIdioma; try{render();}catch(e){} } },1500);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ setTimeout(start,1800); });
+  else setTimeout(start,1800);
+})();
 </script>
 </body>
 </html>
