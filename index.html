@@ -2284,6 +2284,7 @@ input[type="color"] { opacity: 0; position: absolute; width: 0; height: 0; }
     #plan6k-card .p6k-bar > b{position:absolute;top:-1px;bottom:-1px;width:2px;background:var(--text-tertiary);opacity:.7;}
     #plan6k-card .p6k-cell.warn .p6k-bar > i{background:var(--warn,#e0b040);}
     #plan6k-card .p6k-sub{font-size:10.5px;color:var(--text-secondary);line-height:1.4;margin-top:5px;word-break:break-word;}
+    #plan6k-card .p6k-cell.wide{grid-column:1/-1;}
     #plan6k-card .p6k-extra{margin-top:8px;font-size:11.5px;color:var(--text-secondary);line-height:1.5;background:var(--surface-2);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:7px 10px;}
     </style>
     <div id="plan6k-card"><div class="p6k-head"><span class="p6k-title">🎯 Plan 6K</span></div></div>
@@ -19629,7 +19630,7 @@ try{ window.getSkinActiva=getSkinActiva; window.DEICY_SKINS=SKINS; }catch(e){}
   function getHoras(){ try{ var t=(window.getMonthlyTotals?window.getMonthlyTotals():null); return (t&&t.mH)?t.mH:0; }catch(e){ return 0; } }
   function render(){
     var card=document.getElementById('deicy-evo-card'); if(!card) return;
-    var goal=parseFloat(localStorage.getItem('deicy_meta_horas_mes')||'')||150;
+    var goal=parseFloat(localStorage.getItem('deicy_meta_horas_mes')||'')||160;
     var horas=getHoras();
     var i=0; for(var k=0;k<ST.length;k++){ if(horas>=ST[k].pct*goal) i=k; }
     var st=ST[i], nx=ST[i+1];
@@ -24244,7 +24245,7 @@ try{ setTimeout(function(){hookBell();updateBellBadge();},700); setTimeout(funct
   function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
   function metaMoney(){ var v=parseFloat(lsGet(K_META)||''); return v>0?v:6000; }
-  function metaHoras(){ var v=parseFloat(lsGet(K_HS)||''); return v>0?v:150; }
+  function metaHoras(){ var v=parseFloat(lsGet(K_HS)||''); return v>0?v:160; }
   function ymKey(y,m){ return y+'-'+pad(m+1); }
 
   function privStats(d,y,m){ /* promedio de minutos de privados (pvt/xclsv/call) de un mes */
@@ -24320,6 +24321,12 @@ try{ setTimeout(function(){hookBell();updateBellBadge();},700); setTimeout(funct
     var w=whales(), tot=w.risk+w.rec, pW=tot?w.rec/tot*100:100;
     var valW=w.ok?(w.risk+' <small>'+L('en riesgo','at risk')+'</small>'):'<small>—</small>';
     var subW=w.ok?((w.risk?('~'+money(w.money)+L('/mes en riesgo','/mo at risk')+' · '):'')+'✅ '+w.rec+(w.rec===1?L(' recuperada',' recovered'):L(' recuperadas',' recovered'))):L('Radar no disponible','Radar unavailable');
+    /* 5 $/hora (gh-7): lo que rinde cada hora contra meta de plata / meta de horas */
+    var rT=mm/mh, rC=st.mH>0?st.total/st.mH:0, rPrev=0, rBest=0, rBestM=-1;
+    for(var j=1;j<=6;j++){ var qd=new Date(y,m-j,1), qs=null; try{ qs=window.__deicyMonthStats?window.__deicyMonthStats(qd.getFullYear(),qd.getMonth()):null; }catch(e){}
+      if(qs&&qs.mH>=20){ var qr=qs.total/qs.mH; if(j===1) rPrev=qr; if(qr>rBest){ rBest=qr; rBestM=qd.getMonth(); } } }
+    var valR=st.mH>0?('$'+num1(rC)+' <small>/h</small> / $'+num1(rT)+' <small>/h</small>'):'<small>—</small>';
+    var subR=L('Meta = ','Goal = ')+money(mm)+' ÷ '+num1(mh)+L(' hs',' hrs')+(rPrev>0?' · '+L('mes pasado: $','last month: $')+num1(rPrev)+'/h':'')+(rBestM>=0?' · '+L('mejor: $','best: $')+num1(rBest)+'/h ('+L(['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][rBestM],['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][rBestM])+')':'');
     /* conclusión */
     var worst=Math.max(lagM,lagH), concl;
     if(worst>0.05){ concl=(lagM>=lagH)?L('Te falta empujar plata 💰','You need to push earnings 💰'):L('Te falta empujar horas ⏰','You need to push hours ⏰'); }
@@ -24342,6 +24349,7 @@ try{ setTimeout(function(){hookBell();updateBellBadge();},700); setTimeout(funct
       +cell('⏰',L('Horas','Hours'),num1(st.mH)+' / <span class="p6k-edit" data-p6k-edit="hours" title="'+L('Tocá para cambiar la meta','Tap to change the goal')+'">'+num1(mh)+'</span> <small>hs</small>',pH*100,lagH>0.03,subH,exp*100)
       +cell('🔒',L('Privados (prom.)','Privates (avg)'),valP,cur.avg/PVT_TARGET*100,cur.n>0&&dn,subP,100)
       +cell('🐳',L('Ballenas','Whales'),valW,pW,w.ok&&w.risk>0&&pW<50,subW,null)
+      +cell('💵',L('Por hora','Per hour'),valR,rT>0?rC/rT*100:0,st.mH>0&&rC<rT*0.9,subR,100).replace('p6k-cell','p6k-cell wide')
       +'</div><div class="p6k-extra">'+extra+'</div>';
   }
   document.addEventListener('click',function(e){
