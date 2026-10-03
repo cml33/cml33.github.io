@@ -24163,13 +24163,24 @@ try{ setTimeout(function(){hookBell();updateBellBadge();},700); setTimeout(funct
   ];
   var MY_TZ='America/Argentina/Buenos_Aires';
   function partsIn(tz,date){
-    var f=new Intl.DateTimeFormat('en-US',{timeZone:tz,hour12:false,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+    var f=new Intl.DateTimeFormat('en-US',{timeZone:tz,hour12:false,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',weekday:'short'});
     var o={}; f.formatToParts(date).forEach(function(p){o[p.type]=p.value;});
     var h=+o.hour; if(h===24) h=0;
-    return {h:h,m:+o.minute,y:+o.year,mo:+o.month,d:+o.day};
+    var wd={Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6}[o.weekday]; if(wd===undefined) wd=new Date(Date.UTC(+o.year,+o.month-1,+o.day)).getUTCDay();
+    return {h:h,m:+o.minute,y:+o.year,mo:+o.month,d:+o.day,wd:wd};
   }
   function offMin(tz,date){ var p=partsIn(tz,date); return Math.round((Date.UTC(p.y,p.mo-1,p.d,p.h,p.m)-Math.floor(date.getTime()/60000)*60000)/60000); }
-  function mood(h){
+  function mood(h,wd){
+    /* Fin de semana según el día DE ESA CIUDAD (sáb y dom locales) */
+    if(wd===6||wd===0){
+      var sab=wd===6;
+      if(h>=2&&h<9)   return {t:L('😴 durmiendo (finde)','😴 asleep (weekend)'),hot:0};
+      if(h>=9&&h<12)  return {t:L('☕ finde, arrancando tranqui','☕ slow weekend morning'),hot:1};
+      if(h>=12&&h<19) return {t:L('🏠 finde libre, en casa','🏠 weekend, at home'),hot:2};
+      if(h>=19&&h<23) return sab?{t:L('🍻 sábado a la noche','🍻 Saturday night'),hot:2}:{t:L('🛋️ domingo en casa','🛋️ Sunday at home'),hot:2};
+      if(sab||h<2)    return {t:L('🌙 noche de finde, buenos privados','🌙 weekend night, good privates'),hot:2};
+      return {t:L('🌙 domingo tarde (mañana laburan)','🌙 late Sunday (work tomorrow)'),hot:1};
+    }
     if(h>=19&&h<23) return {t:L('🔥 horario fuerte','🔥 prime time'),hot:2};
     if(h>=23||h<2)  return {t:L('🌙 noche, buenos privados','🌙 late night, good privates'),hot:2};
     if(h>=17&&h<19) return {t:L('🌆 saliendo del laburo','🌆 off work'),hot:1};
@@ -24200,7 +24211,7 @@ try{ setTimeout(function(){hookBell();updateBellBadge();},700); setTimeout(funct
     var el=document.getElementById('tz-clock'); if(!el) return;
     var now=new Date(), hot=0, cells='';
     ZONES.forEach(function(z){
-      var p=partsIn(z.tz,now), m=mood(p.h); hot+=m.hot;
+      var p=partsIn(z.tz,now), m=mood(p.h,p.wd); hot+=m.hot;
       var diff=(offMin(z.tz,now)-offMin(MY_TZ,now))/60; var ds=(diff>0?'+':'')+diff+'h';
       cells+='<div style="background:var(--surface-2);border:0.5px solid '+(m.hot===2?'var(--accent)':'var(--border)')+';border-radius:var(--radius-sm);padding:8px 6px;text-align:center;min-width:0;">'
         +'<div style="font-size:11px;color:var(--text-tertiary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+z.flag+' '+L(z.es,z.en)+' <span style="opacity:.7">'+ds+'</span></div>'

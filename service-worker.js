@@ -4,7 +4,7 @@
    Version: Deicy viva + voladora
    ============================================ */
 
-const CACHE_VERSION = 'deicy-gh-v7';
+const CACHE_VERSION = 'deicy-gh-v8';
 const CACHE_NAME = `deicy-cache-${CACHE_VERSION}`;
 
 // Archivos a precachear al instalar el SW
