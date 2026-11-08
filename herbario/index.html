@@ -99,11 +99,27 @@ h1{font-family:var(--f-display);font-weight:600;font-size:clamp(26px,5vw,42px);l
 .ficha.azul h2{color:#24496a}
 .ficha.azul .btn.abrir{background:#2a5577}
 .ficha.azul .btn.abrir:hover{background:#336590}
+.ficha.violeta h2{color:#4a2f6e}
+.ficha.violeta .btn.abrir{background:#4a2f6e}
+.ficha.violeta .btn.abrir:hover{background:#5b3a85}
+.ficha.rojo h2{color:#6e1622}
+.ficha.rojo .btn.abrir{background:#6e1622}
+.ficha.rojo .btn.abrir:hover{background:#86202e}
+.ficha.negro h2{color:#1d1b20}
+.ficha.negro .btn.abrir{background:#1d1b20}
+.ficha.negro .btn.abrir:hover{background:#34313a}
+.estado{display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;font-size:10px;letter-spacing:.2em;background:rgba(138,106,44,.14);color:#7a5a20;box-shadow:inset 0 0 0 1px rgba(138,106,44,.45)}
+.estado[hidden]{display:none}
+.btn[hidden]{display:none}
 .pie{font-family:var(--f-display);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#7f8f7f;text-align:center}
 .ayuda{font-family:var(--f-fell);font-style:italic;color:#bfae86;font-size:16px;margin:-8px 0 0}
 
 @media (max-width:640px){
-  :root{--lomo-h:min(48vh,360px)}
+  :root{--lomo-h:min(44vh,330px)}
+  .cristal{display:none}
+  .fila{gap:4px}
+  .estante{padding:0 12px}
+  .tabla{margin:0 -12px}
   .ficha{grid-template-columns:1fr;justify-items:center;text-align:center;padding:22px 18px}
   .ficha img{max-width:190px}
   .ficha .datos,.acciones{justify-content:center}
@@ -135,6 +151,15 @@ h1{font-family:var(--f-display);font-weight:600;font-size:clamp(26px,5vw,42px);l
       <button class="libro" data-k="tomo2" style="--w:calc(var(--lomo-h) * .104)" aria-pressed="false" aria-label="Tomo II, El Mapa del Cielo">
         <img src="img/lomo-tomo2.jpg" alt="">
       </button>
+      <button class="libro" data-k="tomo3" style="--w:calc(var(--lomo-h) * .085)" aria-pressed="false" aria-label="Tomo III, El Oráculo (en preparación)">
+        <img src="img/lomo-tomo3.jpg" alt="">
+      </button>
+      <button class="libro" data-k="tomo4" style="--w:calc(var(--lomo-h) * .085)" aria-pressed="false" aria-label="Tomo IV, El Laboratorio (en preparación)">
+        <img src="img/lomo-tomo4.jpg" alt="">
+      </button>
+      <button class="libro" data-k="tomo5" style="--w:calc(var(--lomo-h) * .085)" aria-pressed="false" aria-label="Tomo V, El Grimorio (en preparación)">
+        <img src="img/lomo-tomo5.jpg" alt="">
+      </button>
       <div class="vela" aria-hidden="true"><div class="cera"></div><div class="pabilo"></div><div class="llama"></div></div>
     </div>
     <div class="tabla" aria-hidden="true"></div>
@@ -144,7 +169,7 @@ h1{font-family:var(--f-display);font-weight:600;font-size:clamp(26px,5vw,42px);l
   <article class="ficha" id="ficha" aria-live="polite">
     <img id="f-tapa" src="img/tapa-completo.jpg" alt="Tapa del libro completo" width="640" height="908">
     <div class="info">
-      <span class="tomo" id="f-tomo">Obra completa</span>
+      <span class="tomo"><span id="f-tomo">Obra completa</span> <span class="estado" id="f-estado" hidden>En preparación</span></span>
       <h2 id="f-tit">Herbario y Vademécum Botánico Tradicional</h2>
       <p class="sub" id="f-sub">El Gabinete y El Mapa del Cielo, en un solo volumen</p>
       <p class="desc" id="f-desc"></p>
@@ -162,13 +187,22 @@ h1{font-family:var(--f-display);font-weight:600;font-size:clamp(26px,5vw,42px);l
 const LIBROS={
   completo:{tomo:'Obra completa',tit:'Herbario y Vademécum Botánico Tradicional',sub:'El Gabinete y El Mapa del Cielo, en un solo volumen',
     desc:'La obra entera, de la primera hierba a la última llave del Tarot: plantas, resinas, aceites, sales y piedras con sus virtudes y correspondencias, y el mapa del cielo que las ordena, con Agrippa, Lévi, la astrología hermética, el Árbol de la Vida y el Liber 777.',
-    datos:['Capítulos I a XIII','Glosario y bibliografía'],href:'completo/',pdf:'pdf/herbario-completo-celu.pdf',tapa:'img/tapa-completo.jpg',azul:false},
+    datos:['Capítulos I a XIII','Glosario y bibliografía'],href:'completo/',pdf:'pdf/herbario-completo-celu.pdf',tapa:'img/tapa-completo.jpg'},
   tomo1:{tomo:'Tomo I',tit:'El Gabinete',sub:'Herbario y Vademécum Botánico Tradicional',
     desc:'La sabiduría botánica, espagírica y tradicional del gabinete: hierbas, flores, especias y maderas, sahumerios e inciensos, aceites esenciales, sales, piedras y metales, con los métodos para prepararlos: infusiones, tinturas, brumas y vasos minerales.',
-    datos:['Capítulos I a VII','Glosario y bibliografía'],href:'tomo-1/',pdf:'pdf/herbario-tomo1-celu.pdf',tapa:'img/tapa-tomo1.jpg',azul:false},
+    datos:['Capítulos I a VII','Glosario y bibliografía'],href:'tomo-1/',pdf:'pdf/herbario-tomo1-celu.pdf',tapa:'img/tapa-tomo1.jpg'},
   tomo2:{tomo:'Tomo II',tit:'El Mapa del Cielo',sub:'Herbario y Vademécum Botánico Tradicional',
     desc:'La sabiduría de los grandes maestros de la filosofía oculta: los 120 elementos y las estrellas fijas de Agrippa, los perfumes planetarios de Éliphas Lévi, la astrología hermética, el Árbol de la Vida, las tablas del Liber 777 y las 78 llaves del Tarot.',
-    datos:['Capítulos VIII a XIII','Glosario y bibliografía'],href:'tomo-2/',pdf:'pdf/herbario-tomo2-celu.pdf',tapa:'img/tapa-tomo2.jpg',azul:true}
+    datos:['Capítulos VIII a XIII','Glosario y bibliografía'],href:'tomo-2/',pdf:'pdf/herbario-tomo2-celu.pdf',tapa:'img/tapa-tomo2.jpg',tema:'azul'},
+  tomo3:{tomo:'Tomo III',tit:'El Oráculo',sub:'Herbario y Vademécum Botánico Tradicional',prep:true,
+    desc:'El oráculo del gabinete: la consagración del mazo, las leyes de interpretación del Libro de Thoth, la doctrina del significador, las tiradas del gabinete y las grandes aperturas herméticas, junto a la geomancia y el oráculo del obí.',
+    datos:['Capítulos XIV a XX'],href:'tomo-3/',pdf:null,tapa:'img/tapa-tomo3.jpg',tema:'violeta'},
+  tomo4:{tomo:'Tomo IV',tit:'El Laboratorio',sub:'Herbario y Vademécum Botánico Tradicional',prep:true,
+    desc:'Los fuegos del laboratorio: los tres principios de Paracelso, los grandes elixires, aguas y vinagres de la historia, tinturas y sinergias planetarias, ungüentos y bálsamos, tintas mágicas, la medicina astrológica del cuerpo y los baños.',
+    datos:['Capítulos XXI a XXVII'],href:'tomo-4/',pdf:null,tapa:'img/tapa-tomo4.jpg',tema:'rojo'},
+  tomo5:{tomo:'Tomo V',tit:'El Grimorio',sub:'Herbario y Vademécum Botánico Tradicional',prep:true,
+    desc:'El sello de la obra: los cuadrados mágicos y los sellos de los planetas, las 28 mansiones de la Luna, los pentáculos y los metales, la custodia del umbral, la historia de las plantas de Hécate y Saturno, la Tabla Esmeralda y los Himnos Órficos.',
+    datos:['Capítulos XXVIII a XXXIII'],href:'tomo-5/',pdf:null,tapa:'img/tapa-tomo5.jpg',tema:'negro'}
 };
 const $=id=>document.getElementById(id);
 function elegir(k){
@@ -177,8 +211,10 @@ function elegir(k){
   $('f-tapa').src=L.tapa; $('f-tapa').alt='Tapa de '+L.tit;
   $('f-tomo').textContent=L.tomo; $('f-tit').textContent=L.tit; $('f-sub').textContent=L.sub; $('f-desc').textContent=L.desc;
   $('f-datos').innerHTML=L.datos.map(d=>'<span>'+d+'</span>').join('<span aria-hidden="true">·</span>');
-  $('f-abrir').href=L.href; $('f-pdf').href=L.pdf;
-  $('ficha').classList.toggle('azul',L.azul);
+  $('f-abrir').href=L.href; $('f-abrir').textContent=L.prep?'Ver el borrador ✦':'Abrir el libro ✦';
+  $('f-pdf').hidden=!L.pdf; if(L.pdf)$('f-pdf').href=L.pdf;
+  $('f-estado').hidden=!L.prep;
+  ['azul','violeta','rojo','negro'].forEach(c=>$('ficha').classList.toggle(c,L.tema===c));
   try{localStorage.setItem('biblio-libro',k)}catch(e){}
 }
 document.querySelectorAll('.libro').forEach(b=>b.addEventListener('click',()=>{
