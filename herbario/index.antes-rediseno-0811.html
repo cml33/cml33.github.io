@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Biblioteca del Gabinete</title>
+<meta name="description" content="Vademécum Hermético Tradicional, de Candela Luna: elegí el libro completo, el Tomo I o el Tomo II.">
+<meta name="theme-color" content="#0e1712">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=IM+Fell+English:ital@0;1&display=swap">
+<style>
+/* Layout: una sala oscura con un estante de madera; los lomos reales se sacan del estante y abren una ficha con la tapa */
+:root{
+  --noche:#0e1712; --noche-2:#18261d; --oro:#d9b866; --oro-suave:#a8843f;
+  --papel:#f2e6c9; --tinta:#2a2418; --madera:#4a2f1c; --madera-osc:#2a190e;
+  --f-display:'Cinzel',Georgia,serif; --f-body:'EB Garamond',Georgia,serif; --f-fell:'IM Fell English',Georgia,serif;
+  --lomo-h:min(56vh,470px);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+  background:
+    radial-gradient(1px 1px at 12% 18%,rgba(255,236,180,.55),transparent 60%),
+    radial-gradient(1px 1px at 78% 12%,rgba(255,236,180,.45),transparent 60%),
+    radial-gradient(1.5px 1.5px at 64% 32%,rgba(255,236,180,.35),transparent 60%),
+    radial-gradient(1px 1px at 30% 40%,rgba(255,236,180,.4),transparent 60%),
+    radial-gradient(1px 1px at 90% 46%,rgba(255,236,180,.35),transparent 60%),
+    radial-gradient(1.5px 1.5px at 6% 58%,rgba(255,236,180,.3),transparent 60%),
+    radial-gradient(ellipse 70% 55% at 50% 38%,#26382b 0%,var(--noche-2) 45%,var(--noche) 100%);
+  background-color:var(--noche);
+  color:var(--papel);font-family:var(--f-body);
+  padding:0 16px 48px;
+}
+.sala{max-width:980px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:28px;padding-top:max(36px,env(safe-area-inset-top,0px))}
+header{text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center}
+.orn{display:flex;align-items:center;gap:10px;color:var(--oro-suave)}
+.orn::before,.orn::after{content:"";width:64px;height:1px;background:linear-gradient(90deg,transparent,var(--oro-suave),transparent)}
+.ojo{font-family:var(--f-display);font-size:12px;letter-spacing:.38em;text-transform:uppercase;color:var(--oro-suave)}
+h1{font-family:var(--f-display);font-weight:600;font-size:clamp(26px,5vw,42px);letter-spacing:.06em;margin:0;color:var(--oro);text-wrap:balance}
+.lead{font-family:var(--f-fell);font-style:italic;font-size:18px;color:#d8c9a3;margin:0;max-width:52ch;text-wrap:balance}
+
+/* ---------- estante ---------- */
+.estante{position:relative;width:100%;max-width:720px;padding:0 24px}
+.fila{position:relative;margin-bottom:-3px;z-index:1;display:flex;align-items:flex-end;justify-content:center;gap:6px;height:calc(var(--lomo-h) + 30px);padding-bottom:0}
+.libro{
+  --w:60px; position:relative;height:var(--lomo-h);width:var(--w);padding:0;border:0;cursor:pointer;background:none;
+  transition:transform .45s cubic-bezier(.2,.8,.2,1),filter .3s;transform-origin:bottom center;
+  filter:drop-shadow(6px 0 6px rgba(0,0,0,.55));
+}
+.libro img{display:block;height:100%;width:100%;border-radius:3px 3px 1px 1px;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.4)}
+.libro::after{content:"";position:absolute;inset:0;border-radius:3px;pointer-events:none;
+  background:linear-gradient(90deg,rgba(0,0,0,.35),rgba(255,255,255,.10) 30%,rgba(255,255,255,0) 55%,rgba(0,0,0,.3))}
+.libro:hover{transform:translateY(-10px)}
+.libro[aria-pressed="true"]{transform:translateY(-26px);filter:drop-shadow(6px 0 6px rgba(0,0,0,.55)) drop-shadow(0 0 14px rgba(217,184,102,.45))}
+.libro:focus-visible{outline:2px solid var(--oro);outline-offset:4px}
+.libro.tumbado{display:none}
+
+/* adornos del estante */
+.vela{position:relative;width:34px;height:120px;margin-left:28px;align-self:flex-end}
+.vela .cera{position:absolute;bottom:0;left:7px;width:20px;height:86px;border-radius:4px 4px 2px 2px;
+  background:linear-gradient(90deg,#d9cba6,#f6ecd2 40%,#cdbd94)}
+.vela .pabilo{position:absolute;bottom:86px;left:16px;width:2px;height:7px;background:#2a2016}
+.vela .llama{position:absolute;bottom:91px;left:10px;width:14px;height:24px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+  background:radial-gradient(ellipse at 50% 70%,#fff8d6 0%,#ffd36b 35%,#ff9a2e 70%,transparent 72%);
+  animation:titila 2.4s ease-in-out infinite;transform-origin:50% 100%}
+.vela::before{content:"";position:absolute;bottom:60px;left:-60px;width:154px;height:154px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,200,110,.22),transparent 65%);animation:brillo 2.4s ease-in-out infinite}
+@keyframes titila{0%,100%{transform:scale(1) rotate(-1deg)}50%{transform:scale(1.06,.94) rotate(2deg)}}
+@keyframes brillo{0%,100%{opacity:.8}50%{opacity:1}}
+.cristal{width:30px;height:46px;align-self:flex-end;margin-right:22px;
+  background:linear-gradient(160deg,#cdb6ef,#8a6cc0 55%,#5b4390);clip-path:polygon(50% 0,100% 30%,85% 100%,15% 100%,0 30%);opacity:.9}
+.tabla{position:relative;height:26px;border-radius:3px;margin:0 -24px;
+  background:linear-gradient(180deg,#6b4429 0%,var(--madera) 35%,var(--madera-osc) 100%);
+  box-shadow:0 18px 30px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,220,170,.25)}
+.tabla::after{content:"";position:absolute;left:0;right:0;top:100%;height:10px;background:linear-gradient(180deg,rgba(0,0,0,.45),transparent)}
+
+/* ---------- ficha del libro ---------- */
+.ficha{width:100%;max-width:760px;display:grid;grid-template-columns:200px 1fr;gap:28px;align-items:center;
+  background:linear-gradient(180deg,#f4ead0,#e9dab4);color:var(--tinta);border-radius:6px;padding:26px 28px;
+  box-shadow:0 20px 50px rgba(0,0,0,.5),inset 0 0 0 1px rgba(168,132,63,.4)}
+.ficha img{width:100%;height:auto;border-radius:3px;box-shadow:0 10px 22px rgba(0,0,0,.35)}
+.ficha .info{display:flex;flex-direction:column;gap:10px}
+.ficha .tomo{font-family:var(--f-display);font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:#8a6a2c}
+.ficha h2{font-family:var(--f-display);font-weight:600;font-size:clamp(20px,3.4vw,27px);line-height:1.2;margin:0;color:#24392b;text-wrap:balance}
+.ficha .sub{font-family:var(--f-fell);font-style:italic;font-size:18px;margin:0;color:#5a4a2c}
+.ficha p.desc{margin:0;font-size:17px;line-height:1.55;max-width:60ch}
+.ficha .datos{display:flex;flex-wrap:wrap;gap:6px 16px;font-family:var(--f-display);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#7a6338;font-variant-numeric:tabular-nums}
+.acciones{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-display);font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+  text-decoration:none;padding:11px 20px;border-radius:999px;transition:background .2s,color .2s}
+.btn.abrir{background:#24392b;color:#f2e6c9;box-shadow:inset 0 0 0 1px var(--oro-suave)}
+.btn.abrir:hover{background:#2f4a38}
+.btn.pdf{color:#24392b;box-shadow:inset 0 0 0 1px #8a6a2c}
+.btn.pdf:hover{background:rgba(138,106,44,.12)}
+.btn:focus-visible{outline:2px solid #8a6a2c;outline-offset:3px}
+.ficha.azul h2{color:#24496a}
+.ficha.azul .btn.abrir{background:#2a5577}
+.ficha.azul .btn.abrir:hover{background:#336590}
+.ficha.violeta h2{color:#4a2f6e}
+.ficha.violeta .btn.abrir{background:#4a2f6e}
+.ficha.violeta .btn.abrir:hover{background:#5b3a85}
+.ficha.rojo h2{color:#6e1622}
+.ficha.rojo .btn.abrir{background:#6e1622}
+.ficha.rojo .btn.abrir:hover{background:#86202e}
+.ficha.negro h2{color:#1d1b20}
+.ficha.negro .btn.abrir{background:#1d1b20}
+.ficha.negro .btn.abrir:hover{background:#34313a}
+.estado{display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;font-size:10px;letter-spacing:.2em;background:rgba(138,106,44,.14);color:#7a5a20;box-shadow:inset 0 0 0 1px rgba(138,106,44,.45)}
+.estado[hidden]{display:none}
+.btn[hidden]{display:none}
+.pie{font-family:var(--f-display);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#7f8f7f;text-align:center}
+.ayuda{font-family:var(--f-fell);font-style:italic;color:#bfae86;font-size:16px;margin:-8px 0 0}
+
+@media (max-width:640px){
+  :root{--lomo-h:min(44vh,330px)}
+  .cristal{display:none}
+  .fila{gap:4px}
+  .estante{padding:0 12px}
+  .tabla{margin:0 -12px}
+  .ficha{grid-template-columns:1fr;justify-items:center;text-align:center;padding:22px 18px}
+  .ficha img{max-width:190px}
+  .ficha .datos,.acciones{justify-content:center}
+  .vela{margin-left:14px}.cristal{margin-right:10px}
+}
+@media (prefers-reduced-motion:reduce){
+  .libro{transition:none}.vela .llama,.vela::before{animation:none}
+}
+</style>
+</head>
+<body>
+<main class="sala">
+  <header>
+    <div class="orn">✦</div>
+    <span class="ojo">Gabinete Hermético · Candela Luna</span>
+    <h1>Biblioteca del Gabinete</h1>
+    <p class="lead">Vademécum Hermético Tradicional: sacá del estante el libro que quieras leer.</p>
+  </header>
+
+  <section class="estante" aria-label="Estante con los libros">
+    <div class="fila" role="group" aria-label="Libros">
+      <div class="cristal" aria-hidden="true"></div>
+      <button class="libro" data-k="completo" style="--w:calc(var(--lomo-h) * .147)" aria-pressed="true" aria-label="Libro completo">
+        <img src="img/lomo-completo.jpg" alt="">
+      </button>
+      <button class="libro" data-k="tomo1" style="--w:calc(var(--lomo-h) * .085)" aria-pressed="false" aria-label="Tomo I, El Gabinete">
+        <img src="img/lomo-tomo1.jpg" alt="">
+      </button>
+      <button class="libro" data-k="tomo2" style="--w:calc(var(--lomo-h) * .104)" aria-pressed="false" aria-label="Tomo II, El Mapa del Cielo">
+        <img src="img/lomo-tomo2.jpg" alt="">
+      </button>
+      <button class="libro" data-k="tomo3" style="--w:calc(var(--lomo-h) * .085)" aria-pressed="false" aria-label="Tomo III, El Oráculo (en preparación)">
+        <img src="img/lomo-tomo3.jpg" alt="">
+      </button>
+      <button class="libro" data-k="tomo4" style="--w:calc(var(--lomo-h) * .085)" aria-pressed="false" aria-label="Tomo IV, El Laboratorio (en preparación)">
+        <img src="img/lomo-tomo4.jpg" alt="">
+      </button>
+      <button class="libro" data-k="tomo5" style="--w:calc(var(--lomo-h) * .085)" aria-pressed="false" aria-label="Tomo V, El Grimorio (en preparación)">
+        <img src="img/lomo-tomo5.jpg" alt="">
+      </button>
+      <div class="vela" aria-hidden="true"><div class="cera"></div><div class="pabilo"></div><div class="llama"></div></div>
+    </div>
+    <div class="tabla" aria-hidden="true"></div>
+  </section>
+  <p class="ayuda">Tocá un lomo para ver el libro; tocalo otra vez para abrirlo.</p>
+
+  <article class="ficha" id="ficha" aria-live="polite">
+    <img id="f-tapa" src="img/tapa-completo.jpg" alt="Tapa del libro completo" width="640" height="908">
+    <div class="info">
+      <span class="tomo"><span id="f-tomo">Obra completa</span> <span class="estado" id="f-estado" hidden>En preparación</span></span>
+      <h2 id="f-tit">Vademécum Hermético Tradicional</h2>
+      <p class="sub" id="f-sub">El Gabinete y El Mapa del Cielo, en un solo volumen</p>
+      <p class="desc" id="f-desc"></p>
+      <div class="datos" id="f-datos"></div>
+      <div class="acciones">
+        <a class="btn abrir" id="f-abrir" href="completo/">Abrir el libro ✦</a>
+        <a class="btn pdf" id="f-pdf" href="pdf/herbario-completo-celu.pdf" download>PDF para el celu</a>
+      </div>
+    </div>
+  </article>
+
+  <p class="pie">MMXXVI · Edición interactiva</p>
+</main>
+<script>
+const LIBROS={
+  completo:{tomo:'Obra completa',tit:'Vademécum Hermético Tradicional',sub:'El Gabinete y El Mapa del Cielo, en un solo volumen',
+    desc:'La obra entera, de la primera hierba a la última llave del Tarot: plantas, resinas, aceites, sales y piedras con sus virtudes y correspondencias, y el mapa del cielo que las ordena, con Agrippa, Lévi, la astrología hermética, el Árbol de la Vida y el Liber 777.',
+    datos:['Capítulos I a XIII','Glosario y bibliografía'],href:'completo/',pdf:'pdf/herbario-completo-celu.pdf',tapa:'img/tapa-completo.jpg'},
+  tomo1:{tomo:'Tomo I',tit:'El Gabinete',sub:'Vademécum Hermético Tradicional · Herbario y Vademécum Botánico',
+    desc:'La sabiduría botánica, espagírica y tradicional del gabinete: hierbas, flores, especias y maderas, sahumerios e inciensos, aceites esenciales, sales, piedras y metales, con los métodos para prepararlos: infusiones, tinturas, brumas y vasos minerales.',
+    datos:['Capítulos I a VII','Glosario y bibliografía'],href:'tomo-1/',pdf:'pdf/herbario-tomo1-celu.pdf',tapa:'img/tapa-tomo1.jpg'},
+  tomo2:{tomo:'Tomo II',tit:'Caelum · El Mapa del Cielo',sub:'Vademécum Hermético Tradicional',
+    desc:'La sabiduría de los grandes maestros de la filosofía oculta: los 120 elementos y las estrellas fijas de Agrippa, los perfumes planetarios de Éliphas Lévi, la astrología hermética, el Árbol de la Vida, las tablas del Liber 777 y las 78 llaves del Tarot.',
+    datos:['Capítulos VIII a XIII','Glosario y bibliografía'],href:'tomo-2/',pdf:'pdf/herbario-tomo2-celu.pdf',tapa:'img/tapa-tomo2.jpg',tema:'azul'},
+  tomo3:{tomo:'Tomo III',tit:'Oraculum · El Oráculo',sub:'Vademécum Hermético Tradicional',prep:true,
+    desc:'El oráculo del gabinete: la consagración del mazo, las leyes de interpretación del Libro de Thoth, la doctrina del significador, las tiradas del gabinete y las grandes aperturas herméticas, junto a la geomancia y el oráculo del obí.',
+    datos:['Capítulos XIV a XX'],href:'tomo-3/',pdf:null,tapa:'img/tapa-tomo3.jpg',tema:'violeta'},
+  tomo4:{tomo:'Tomo IV',tit:'Theatrum Spagyricum · El Laboratorio',sub:'Vademécum Hermético Tradicional',prep:true,
+    desc:'Los fuegos del laboratorio: los tres principios de Paracelso, los grandes elixires, aguas y vinagres de la historia, tinturas y sinergias planetarias, ungüentos y bálsamos, tintas mágicas, la medicina astrológica del cuerpo y los baños.',
+    datos:['Capítulos XXI a XXVII'],href:'tomo-4/',pdf:null,tapa:'img/tapa-tomo4.jpg',tema:'rojo'},
+  tomo5:{tomo:'Tomo V',tit:'Ars Talismanica · El Grimorio',sub:'Vademécum Hermético Tradicional',prep:true,
+    desc:'El sello de la obra: los cuadrados mágicos y los sellos de los planetas, las 28 mansiones de la Luna, los pentáculos y los metales, la custodia del umbral, la historia de las plantas de Hécate y Saturno, la Tabla Esmeralda y los Himnos Órficos.',
+    datos:['Capítulos XXVIII a XXXIII'],href:'tomo-5/',pdf:null,tapa:'img/tapa-tomo5.jpg',tema:'negro'}
+};
+const $=id=>document.getElementById(id);
+function elegir(k){
+  const L=LIBROS[k];
+  document.querySelectorAll('.libro').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k?'true':'false'));
+  $('f-tapa').src=L.tapa; $('f-tapa').alt='Tapa de '+L.tit;
+  $('f-tomo').textContent=L.tomo; $('f-tit').textContent=L.tit; $('f-sub').textContent=L.sub; $('f-desc').textContent=L.desc;
+  $('f-datos').innerHTML=L.datos.map(d=>'<span>'+d+'</span>').join('<span aria-hidden="true">·</span>');
+  $('f-abrir').href=L.href; $('f-abrir').textContent=L.prep?'Ver el borrador ✦':'Abrir el libro ✦';
+  $('f-pdf').hidden=!L.pdf; if(L.pdf)$('f-pdf').href=L.pdf;
+  $('f-estado').hidden=!L.prep;
+  ['azul','violeta','rojo','negro'].forEach(c=>$('ficha').classList.toggle(c,L.tema===c));
+  try{localStorage.setItem('biblio-libro',k)}catch(e){}
+}
+document.querySelectorAll('.libro').forEach(b=>b.addEventListener('click',()=>{
+  if(b.getAttribute('aria-pressed')==='true'){location.href=LIBROS[b.dataset.k].href;return}
+  elegir(b.dataset.k);
+  if(matchMedia('(max-width:640px)').matches)$('ficha').scrollIntoView({behavior:'smooth',block:'start'});
+}));
+let ini='completo';try{const s=localStorage.getItem('biblio-libro');if(s&&LIBROS[s])ini=s}catch(e){}
+elegir(ini);
+</script>
+</body>
+</html>
