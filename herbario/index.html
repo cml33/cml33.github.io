@@ -81,6 +81,28 @@ a{color:inherit}
   .luz{animation:none;opacity:.8}
 }
 
+/* cajitas de scrapbook: debajo de la estantería */
+.cajas{background:linear-gradient(180deg,#0a1119 0,#0d1626 100%);color:#c9d0e2;padding:8px 0 76px}
+.cajas .titulo-sec h2{font-family:'Pinyon Script','IM Fell English',cursive;font-weight:400;letter-spacing:.01em;font-size:clamp(40px,7vw,60px);line-height:1.05;color:var(--oro-claro);text-shadow:0 2px 24px rgba(201,164,92,.35);margin:0 0 6px}
+.cajas .titulo-sec p{color:#aeb8d0}
+.cajas .titulo-sec{margin-bottom:40px}
+.fila-cajas{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:26px 22px;align-items:end}
+.caja{--c:#2a4a33;--c2:#1c3324;display:block;position:relative;text-decoration:none;padding-top:14px}
+.caja.verde{--c:#2a4a33;--c2:#1c3324}.caja.celeste{--c:#2a5f86;--c2:#173a55}.caja.violeta{--c:#4a2f6e;--c2:#2f1c49}.caja.rojo{--c:#7a1a28;--c2:#4f0f19}.caja.negro{--c:#2a272e;--c2:#121014}
+.caja .tapa-c{position:relative;z-index:2;display:block;height:34px;margin:0 -5px;border-radius:3px 3px 1px 1px;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(0,0,0,.28)),var(--img) center/220px,var(--c);border:1px solid var(--oro-viejo);box-shadow:0 4px 8px rgba(0,0,0,.5);transition:transform .35s}
+.caja .cuerpo-c{position:relative;display:flex;align-items:center;justify-content:center;aspect-ratio:1/1.02;padding:12px;border:1px solid var(--oro-viejo);border-top:0;border-radius:0 0 3px 3px;background:linear-gradient(90deg,rgba(0,0,0,.34),rgba(255,255,255,.06) 22%,rgba(255,255,255,0) 60%,rgba(0,0,0,.36)),var(--img) center/260px,var(--c);box-shadow:0 14px 26px rgba(0,0,0,.6);transition:box-shadow .35s}
+.caja .cuerpo-c::after{content:"";position:absolute;left:-8%;right:-8%;bottom:-9px;height:16px;z-index:-1;border-radius:50%;background:radial-gradient(ellipse at center,rgba(0,0,0,.8),rgba(0,0,0,0) 70%)}
+.caja .rotulo{display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;padding:12px 8px 11px;text-align:center;background:var(--crema);color:var(--c2);border:1px solid var(--oro-viejo);outline:1px solid rgba(154,122,53,.6);outline-offset:-5px;box-shadow:0 3px 8px rgba(0,0,0,.45)}
+.caja .rotulo b{font-family:var(--f-display);font-weight:600;font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--oro-viejo)}
+.caja .rotulo strong{font-family:var(--f-display);font-weight:600;font-size:clamp(12.5px,1.35vw,15.5px);line-height:1.2;letter-spacing:.04em;text-wrap:balance}
+.caja .rotulo i{font-family:var(--f-fell);font-size:14.5px;color:#6b5a34}
+.caja .rotulo small{margin-top:3px;font-family:var(--f-display);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:#8a7440}
+.caja:hover .tapa-c,.caja:focus-visible .tapa-c{transform:translateY(-9px) rotate(-2.2deg)}
+.caja:hover .cuerpo-c,.caja:focus-visible .cuerpo-c{box-shadow:0 14px 26px rgba(0,0,0,.6),0 0 0 1px var(--oro),0 0 24px rgba(227,201,138,.5)}
+.caja:focus-visible{outline:2px solid var(--oro-claro);outline-offset:6px}
+@media (max-width:900px){.fila-cajas{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){.fila-cajas{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 20px}.cajas{padding-bottom:56px}}
+
 /* tomos */
 .tomos{padding:72px 0 80px}
 .titulo-sec{text-align:center;margin-bottom:44px}
@@ -148,8 +170,8 @@ a{color:inherit}
         <div class="regla"></div>
         <p class="texto">La obra entera en un solo libro: el gabinete de las plantas, resinas, aceites y piedras; el mapa del cielo de los grandes maestros; el oráculo de Arcana Herbarum; el laboratorio espagírico y el grimorio de los talismanes y la noche. Ya incluye los cinco tomos, con sus juegos interactivos.</p>
         <div class="acciones">
-          <a class="btn abrir" href="completo/?v=20261110d">Abrir la obra completa</a>
-          <a class="btn pdf" href="pdf/herbario-completo-celu.pdf?v=20261110d" download>PDF para el celu</a>
+          <a class="btn abrir" href="completo/?v=20261110e">Abrir la obra completa</a>
+          <a class="btn pdf" href="pdf/herbario-completo-celu.pdf?v=20261110e" download>PDF para el celu</a>
         </div>
       </div>
     </div>
@@ -176,6 +198,38 @@ a{color:inherit}
       </div>
   </section>
 
+  <section class="cajas" id="cajas" aria-labelledby="h-cajas">
+    <div class="wrap">
+      <div class="titulo-sec">
+        <h2 id="h-cajas">Cajas de scrapbook</h2>
+        <p>Cada tomo tiene su caja: stickers, cintas washi, etiquetas y papeles para ver y descargar.</p>
+        <div class="regla"></div>
+      </div>
+      <div class="fila-cajas">
+        <a class="caja verde" href="kits/tomo-1/?v=20261110e" style="--img:url(img/caja-tomo1.jpg)" aria-label="Kit de scrapbook del Tomo I, El Gabinete: abrir la versión digital">
+          <span class="tapa-c" aria-hidden="true"></span>
+          <span class="cuerpo-c"><span class="rotulo"><b>Tomo I</b><strong>El Gabinete</strong><i>Kit de scrapbook</i><small>47 piezas</small></span></span>
+        </a>
+        <a class="caja celeste" href="kits/tomo-2/?v=20261110e" style="--img:url(img/caja-tomo2.jpg)" aria-label="Kit de scrapbook del Tomo II, El Mapa del Cielo: abrir la versión digital">
+          <span class="tapa-c" aria-hidden="true"></span>
+          <span class="cuerpo-c"><span class="rotulo"><b>Tomo II</b><strong>El Mapa del Cielo</strong><i>Kit de scrapbook</i><small>43 piezas</small></span></span>
+        </a>
+        <a class="caja violeta" href="kits/tomo-3/?v=20261110e" style="--img:url(img/caja-tomo3.jpg)" aria-label="Kit de scrapbook del Tomo III, El Oráculo: abrir la versión digital">
+          <span class="tapa-c" aria-hidden="true"></span>
+          <span class="cuerpo-c"><span class="rotulo"><b>Tomo III</b><strong>El Oráculo</strong><i>Kit de scrapbook</i><small>37 piezas</small></span></span>
+        </a>
+        <a class="caja rojo" href="kits/tomo-4/?v=20261110e" style="--img:url(img/caja-tomo4.jpg)" aria-label="Kit de scrapbook del Tomo IV, El Laboratorio: abrir la versión digital">
+          <span class="tapa-c" aria-hidden="true"></span>
+          <span class="cuerpo-c"><span class="rotulo"><b>Tomo IV</b><strong>El Laboratorio</strong><i>Kit de scrapbook</i><small>38 piezas</small></span></span>
+        </a>
+        <a class="caja negro" href="kits/tomo-5/?v=20261110e" style="--img:url(img/caja-tomo5.jpg)" aria-label="Kit de scrapbook del Tomo V, El Grimorio: abrir la versión digital">
+          <span class="tapa-c" aria-hidden="true"></span>
+          <span class="cuerpo-c"><span class="rotulo"><b>Tomo V</b><strong>El Grimorio</strong><i>Kit de scrapbook</i><small>38 piezas</small></span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <section class="tomos" id="tomos" aria-labelledby="h-tomos">
     <div class="wrap">
       <div class="titulo-sec">
@@ -186,62 +240,62 @@ a{color:inherit}
       <div class="grilla">
 
     <article class="tomo verde" id="tomo1">
-      <a class="tapa" href="tomo-1/?v=20261110d" tabindex="-1" aria-hidden="true"><img src="img/tapa-tomo1.jpg" alt="" width="640" height="908"></a>
+      <a class="tapa" href="tomo-1/?v=20261110e" tabindex="-1" aria-hidden="true"><img src="img/tapa-tomo1.jpg" alt="" width="640" height="908"></a>
       <div class="cuerpo">
         <p class="num">Tomo I</p>
         <h3>El Gabinete</h3>
         <p class="lat">Herbario y Vademécum Botánico</p>
         <p class="desc">La sabiduría botánica, espagírica y tradicional del gabinete: hierbas, flores, especias y maderas, sahumerios e inciensos, aceites esenciales, sales, piedras y metales, con los métodos para prepararlos.</p>
         <p class="cap">Capítulos I a VII</p>
-        <div class="acciones"><a class="btn abrir" href="tomo-1/?v=20261110d" aria-label="Abrir el libro: Tomo I, El Gabinete">Abrir el libro</a><a class="btn pdf" href="pdf/herbario-tomo1-celu.pdf?v=20261110d" download>PDF para el celu</a><a class="btn pdf" href="kits/kit-scrapbook-tomo1.pdf?v=20261110d" download>Kit de scrapbook</a></div>
+        <div class="acciones"><a class="btn abrir" href="tomo-1/?v=20261110e" aria-label="Abrir el libro: Tomo I, El Gabinete">Abrir el libro</a><a class="btn pdf" href="pdf/herbario-tomo1-celu.pdf?v=20261110e" download>PDF para el celu</a><a class="btn pdf" href="kits/tomo-1/?v=20261110e">Kit de scrapbook</a></div>
       </div>
     </article>
 
     <article class="tomo celeste" id="tomo2">
-      <a class="tapa" href="tomo-2/?v=20261110d" tabindex="-1" aria-hidden="true"><img src="img/tapa-tomo2.jpg" alt="" width="640" height="908"></a>
+      <a class="tapa" href="tomo-2/?v=20261110e" tabindex="-1" aria-hidden="true"><img src="img/tapa-tomo2.jpg" alt="" width="640" height="908"></a>
       <div class="cuerpo">
         <p class="num">Tomo II</p>
         <h3>Caelum · El Mapa del Cielo</h3>
         <p class="lat">Vademécum Hermético Tradicional</p>
         <p class="desc">Los grandes maestros de la filosofía oculta: los 120 elementos y las estrellas fijas de Agrippa, los perfumes planetarios de Lévi, la astrología hermética, el Árbol de la Vida, el Liber 777 y las 78 llaves del Tarot.</p>
         <p class="cap">Capítulos VIII a XIII</p>
-        <div class="acciones"><a class="btn abrir" href="tomo-2/?v=20261110d" aria-label="Abrir el libro: Tomo II, Caelum">Abrir el libro</a><a class="btn pdf" href="pdf/herbario-tomo2-celu.pdf?v=20261110d" download>PDF para el celu</a><a class="btn pdf" href="kits/kit-scrapbook-tomo2.pdf?v=20261110d" download>Kit de scrapbook</a></div>
+        <div class="acciones"><a class="btn abrir" href="tomo-2/?v=20261110e" aria-label="Abrir el libro: Tomo II, Caelum">Abrir el libro</a><a class="btn pdf" href="pdf/herbario-tomo2-celu.pdf?v=20261110e" download>PDF para el celu</a><a class="btn pdf" href="kits/tomo-2/?v=20261110e">Kit de scrapbook</a></div>
       </div>
     </article>
 
     <article class="tomo violeta prep" id="tomo3">
-      <a class="tapa" href="tomo-3/?v=20261110d" tabindex="-1" aria-hidden="true"><img src="img/tapa-tomo3.jpg" alt="" width="640" height="908"></a>
+      <a class="tapa" href="tomo-3/?v=20261110e" tabindex="-1" aria-hidden="true"><img src="img/tapa-tomo3.jpg" alt="" width="640" height="908"></a>
       <div class="cuerpo">
         <p class="num">Tomo III</p>
         <h3>Oraculum · El Oráculo</h3>
         <p class="lat">Vademécum Hermético Tradicional</p>
         <p class="desc">La consagración del mazo, las leyes de interpretación del Libro de Thoth, la doctrina del significador, las tiradas del gabinete, la geomancia y el oráculo del obí.</p>
         <p class="cap">Capítulos XIV a XX</p>
-        <div class="acciones"><a class="btn abrir" href="tomo-3/?v=20261110d" aria-label="Abrir el libro: Tomo III, Oraculum">Abrir el libro</a><a class="btn pdf" href="pdf/herbario-tomo3-celu.pdf?v=20261110d" download>PDF para el celu</a><a class="btn pdf" href="kits/kit-scrapbook-tomo3.pdf?v=20261110d" download>Kit de scrapbook</a></div>
+        <div class="acciones"><a class="btn abrir" href="tomo-3/?v=20261110e" aria-label="Abrir el libro: Tomo III, Oraculum">Abrir el libro</a><a class="btn pdf" href="pdf/herbario-tomo3-celu.pdf?v=20261110e" download>PDF para el celu</a><a class="btn pdf" href="kits/tomo-3/?v=20261110e">Kit de scrapbook</a></div>
       </div>
     </article>
 
     <article class="tomo rojo prep" id="tomo4">
-      <a class="tapa" href="tomo-4/?v=20261110d" tabindex="-1" aria-hidden="true"><img src="img/tapa-tomo4.jpg" alt="" width="640" height="908"></a>
+      <a class="tapa" href="tomo-4/?v=20261110e" tabindex="-1" aria-hidden="true"><img src="img/tapa-tomo4.jpg" alt="" width="640" height="908"></a>
       <div class="cuerpo">
         <p class="num">Tomo IV</p>
         <h3>Theatrum Spagyricum · El Laboratorio</h3>
         <p class="lat">Vademécum Hermético Tradicional</p>
         <p class="desc">Los fuegos del laboratorio: los tres principios de Paracelso, elixires, aguas y vinagres, tinturas y sinergias planetarias, ungüentos, tintas mágicas, medicina astrológica y baños.</p>
         <p class="cap">Capítulos XXI a XXVII</p>
-        <div class="acciones"><a class="btn abrir" href="tomo-4/?v=20261110d" aria-label="Abrir el libro: Tomo IV, Theatrum Spagyricum">Abrir el libro</a><a class="btn pdf" href="pdf/herbario-tomo4-celu.pdf?v=20261110d" download>PDF para el celu</a><a class="btn pdf" href="kits/kit-scrapbook-tomo4.pdf?v=20261110d" download>Kit de scrapbook</a></div>
+        <div class="acciones"><a class="btn abrir" href="tomo-4/?v=20261110e" aria-label="Abrir el libro: Tomo IV, Theatrum Spagyricum">Abrir el libro</a><a class="btn pdf" href="pdf/herbario-tomo4-celu.pdf?v=20261110e" download>PDF para el celu</a><a class="btn pdf" href="kits/tomo-4/?v=20261110e">Kit de scrapbook</a></div>
       </div>
     </article>
 
     <article class="tomo negro prep" id="tomo5">
-      <a class="tapa" href="tomo-5/?v=20261110d" tabindex="-1" aria-hidden="true"><img src="img/tapa-tomo5.jpg" alt="" width="640" height="908"></a>
+      <a class="tapa" href="tomo-5/?v=20261110e" tabindex="-1" aria-hidden="true"><img src="img/tapa-tomo5.jpg" alt="" width="640" height="908"></a>
       <div class="cuerpo">
         <p class="num">Tomo V</p>
         <h3>Ars Talismanica · El Grimorio</h3>
         <p class="lat">Vademécum Hermético Tradicional</p>
         <p class="desc">Los cuadrados mágicos y los sellos de los planetas, las 28 mansiones de la Luna, los pentáculos y los metales, la custodia del umbral, la Tabla Esmeralda y los Himnos Órficos.</p>
         <p class="cap">Capítulos XXVIII a XXXIII</p>
-        <div class="acciones"><a class="btn abrir" href="tomo-5/?v=20261110d" aria-label="Abrir el libro: Tomo V, Ars Talismanica">Abrir el libro</a><a class="btn pdf" href="pdf/herbario-tomo5-celu.pdf?v=20261110d" download>PDF para el celu</a><a class="btn pdf" href="kits/kit-scrapbook-tomo5.pdf?v=20261110d" download>Kit de scrapbook</a></div>
+        <div class="acciones"><a class="btn abrir" href="tomo-5/?v=20261110e" aria-label="Abrir el libro: Tomo V, Ars Talismanica">Abrir el libro</a><a class="btn pdf" href="pdf/herbario-tomo5-celu.pdf?v=20261110e" download>PDF para el celu</a><a class="btn pdf" href="kits/tomo-5/?v=20261110e">Kit de scrapbook</a></div>
       </div>
     </article>
 
