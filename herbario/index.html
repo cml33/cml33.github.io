@@ -86,9 +86,9 @@ a{color:inherit}
 .cajas .titulo-sec h2{font-family:'Pinyon Script','IM Fell English',cursive;font-weight:400;letter-spacing:.01em;font-size:clamp(40px,7vw,60px);line-height:1.05;color:var(--oro-claro);text-shadow:0 2px 24px rgba(201,164,92,.35);margin:0 0 6px}
 .cajas .titulo-sec p{color:#aeb8d0}
 .cajas .titulo-sec{margin-bottom:40px}
-.fila-cajas{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:26px 22px;align-items:end}
+.fila-cajas{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:26px 18px;align-items:end}
 .caja{--c:#2a4a33;--c2:#1c3324;display:block;position:relative;text-decoration:none;padding-top:14px}
-.caja.verde{--c:#2a4a33;--c2:#1c3324}.caja.celeste{--c:#2a5f86;--c2:#173a55}.caja.violeta{--c:#4a2f6e;--c2:#2f1c49}.caja.rojo{--c:#7a1a28;--c2:#4f0f19}.caja.negro{--c:#2a272e;--c2:#121014}
+.caja.verde{--c:#2a4a33;--c2:#1c3324}.caja.celeste{--c:#2a5f86;--c2:#173a55}.caja.violeta{--c:#4a2f6e;--c2:#2f1c49}.caja.rojo{--c:#7a1a28;--c2:#4f0f19}.caja.negro{--c:#2a272e;--c2:#121014}.caja.oro{--c:#c9a45c;--c2:#5a4312}.caja.oro .cuerpo-c,.caja.oro .tapa-c{border-color:var(--oro-claro)}.caja.oro .cuerpo-c{box-shadow:0 14px 26px rgba(0,0,0,.6),0 0 22px rgba(227,201,138,.35)}
 .caja .tapa-c{position:relative;z-index:2;display:block;height:34px;margin:0 -5px;border-radius:3px 3px 1px 1px;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(0,0,0,.28)),var(--img) center/220px,var(--c);border:1px solid var(--oro-viejo);box-shadow:0 4px 8px rgba(0,0,0,.5);transition:transform .35s}
 .caja .cuerpo-c{position:relative;display:flex;align-items:center;justify-content:center;aspect-ratio:1/1.02;padding:12px;border:1px solid var(--oro-viejo);border-top:0;border-radius:0 0 3px 3px;background:linear-gradient(90deg,rgba(0,0,0,.34),rgba(255,255,255,.06) 22%,rgba(255,255,255,0) 60%,rgba(0,0,0,.36)),var(--img) center/260px,var(--c);box-shadow:0 14px 26px rgba(0,0,0,.6);transition:box-shadow .35s}
 .caja .cuerpo-c::after{content:"";position:absolute;left:-8%;right:-8%;bottom:-9px;height:16px;z-index:-1;border-radius:50%;background:radial-gradient(ellipse at center,rgba(0,0,0,.8),rgba(0,0,0,0) 70%)}
@@ -202,7 +202,7 @@ a{color:inherit}
     <div class="wrap">
       <div class="titulo-sec">
         <h2 id="h-cajas">Cajas de scrapbook</h2>
-        <p>Cada tomo tiene su caja: stickers, cintas washi, etiquetas y papeles para ver y descargar.</p>
+        <p>Cada tomo tiene su caja: stickers, cintas washi, etiquetas y papeles para ver y descargar. En la caja dorada, los extras por temática.</p>
         <div class="regla"></div>
       </div>
       <div class="fila-cajas">
@@ -226,6 +226,12 @@ a{color:inherit}
           <span class="tapa-c" aria-hidden="true"></span>
           <span class="cuerpo-c"><span class="rotulo"><b>Tomo V</b><strong>El Grimorio</strong><i>Kit de scrapbook</i><small>44 hojas para imprimir</small></span></span>
         </a>
+        <!--extras-->
+        <a class="caja oro" href="kits/extras/?v=20261120a" style="--img:url(img/caja-extras.jpg)" aria-label="Extras Scrapbook: kits temáticos para ver y descargar">
+          <span class="tapa-c" aria-hidden="true"></span>
+          <span class="cuerpo-c"><span class="rotulo"><b>Extras</b><strong>Scrapbook</strong><i>9 temáticas</i><small>90 hojas para imprimir</small></span></span>
+        </a>
+        <!--/extras-->
       </div>
     </div>
   </section>
